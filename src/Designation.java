@@ -1,28 +1,25 @@
-public class Designation {
+public class Designation{  
 
     private int id;
     private String name;
 
-    Designation() {
+    Designation(){    
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int id){ 
+        this.id = id; 
+    }
+    
+    public int getId(){ 
+        return id; 
     }
 
-    public int getId() {
-        return id;
+    public void setName(String name){ 
+        this.name = name; 
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+        
+    public String getName(){ 
+        return name; 
     }
 
 }
-
-
-

@@ -1,27 +1,34 @@
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class StatusemployeeDao {
+public class StatusEmployeeDao{ 
 
-    public static Statusemployee getById(int id) {
+    public static StatusEmployee getById(int id){ 
 
-        Statusemployee statusemployee = new Statusemployee();
+        StatusEmployee statusEmployee = new StatusEmployee();
 
-        try {
-            String qry = "select * from statusemployee where id=" + id;
+        try{ 
+
+            String qry = "select * from statusEmployee where id="+id;
             ResultSet rslt = CommonDao.get(qry);
-            rslt.next();
-            statusemployee.setId(rslt.getInt("id"));
-            statusemployee.setName(rslt.getObject("name").toString());
 
-        } catch (SQLException e) {
-            System.out.println("Can't Get Results as : " + e.getMessage());
+            rslt.next(); 
+
+                statusEmployee.setId(rslt.getInt(1));
+                statusEmployee.setName(rslt.getObject(2).toString() );
+
         }
 
-        return statusemployee;
+        catch(SQLException e){ 
+
+            System.out.println("Can't Connect as : "+ e.getMessage());
+        }
+
+
+            return statusEmployee;
 
     }
-
 }
-
-
