@@ -2,10 +2,11 @@ import java.util.List;
 
 public class StatusEmployeeController{
 
-    public static List<StatusEmployee> get(){
+public static List<StatusEmployee> get(){
 
-        List<StatusEmployee> statusEmployees =StatusEmployeeDao.getAll();
-        return statusEmployees;
+    List<StatusEmployee> statusEmployees =StatusEmployeeDao.getAll();
 
-    }
+    return statusEmployees;
+
+}
 }

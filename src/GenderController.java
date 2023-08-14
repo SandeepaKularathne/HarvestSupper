@@ -1,11 +1,12 @@
 import java.util.List;
 
-public class GenderController{ 
+public class GenderController{
 
-    public static List<Gender> get(){ 
+public static List<Gender> get(){
 
-        List<Gender> genders = GenderDao.getAll();
-        return genders;
+    List<Gender> genders = GenderDao.getAll();
 
-    }
+    return genders;
+
+}
 }
