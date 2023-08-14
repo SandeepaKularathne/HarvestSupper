@@ -31,7 +31,7 @@ public class GenderDao{
         }
 
 
-            return gender;
+        return gender;
 
     } 
 
@@ -60,7 +60,7 @@ public class GenderDao{
             System.out.println("Can't Connect as : "+ e.getMessage());
         }
 
-            return genders;
+        return genders;
 
     }
 }

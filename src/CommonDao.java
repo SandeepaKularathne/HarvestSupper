@@ -23,4 +23,23 @@ public class CommonDao {
 
     }
 
+    public static String insert(String qry){
+
+
+        String msg = "0";
+
+        try{
+
+            Connection dbcon = DriverManager.getConnection("jdbc:mysql://localhost/harvest","root","12345678");
+            Statement stm = dbcon.createStatement();
+            int rows= stm.executeUpdate(qry);
+            if (rows !=0) msg ="1";
+        }
+        catch (SQLException e1) {
+            System.out.println("Database error as : " + e1.getMessage());
+            msg="Database Error";
+        }
+        return msg;
+    }
+
 }

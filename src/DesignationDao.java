@@ -4,6 +4,9 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class DesignationDao{ 
 
     public static Designation getById(int id){ 
@@ -27,8 +30,35 @@ public class DesignationDao{
             System.out.println("Can't Connect as : "+ e.getMessage());
         }
 
-
-            return designation;
+        return designation;
 
     }
+
+    public  static List<Designation> getAll(){
+
+        List<Designation> designations =  new ArrayList();
+    
+        try {
+         
+           String qry = "select * from designation";
+           ResultSet rslt = CommonDao.get(qry);      
+    
+            while( rslt.next()) {
+                Designation designation = new Designation();
+    
+                designation.setId(rslt.getInt("id"));
+                designation.setName(rslt.getObject("name").toString());
+                
+                designations.add(designation);
+            }
+           
+        } 
+       
+        catch (SQLException e1) {
+            System.out.println("Can't Connect as : " + e1.getMessage());
+             
+        }
+        return designations;
+    }
+    
 }

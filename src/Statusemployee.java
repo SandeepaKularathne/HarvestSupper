@@ -21,5 +21,9 @@ public class StatusEmployee{
         return name; 
     }
 
+    public String toString(){
+        return name;
+    }
+
     
 }
