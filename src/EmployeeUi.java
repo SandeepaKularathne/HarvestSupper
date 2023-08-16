@@ -1,627 +1,804 @@
-import javax.swing.JFrame;
-
-import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Dimension;
-import java.awt.Color;
-
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.util.Vector;
 import java.util.List;
-import java.awt.event.ActionListener;
+
+import java.awt.Dimension;
+import java.awt.Container;
+import java.awt.FlowLayout;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+import javax.swing.JScrollPane; 
+
 import java.awt.event.ActionEvent;
-
-import java.util.Hashtable;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.Hashtable; 
 
-import javax.swing.event.ListSelectionListener;
+import java.awt.Color; 
+
 import javax.swing.event.ListSelectionEvent;
-
-public class EmployeeUi extends JFrame{
-//Goble Varible
-        JTable tblEmployee;
-        JComboBox<Object> cmbSearchGender;
-        JTextField textSearchName;
-        Vector titles;
-
-        JTextField txtName;
-        JTextField txtNic;
-        JTextField txtMobile;
-        JTextField txtEmail;
-
-        JComboBox<Object> cmbGender;
-        JComboBox<Object> cmblDesignation;
-        JComboBox<Object> cmbStatusEmpolyee;
-        
-        JComboBox<Object> cmbDobYear;
-        JComboBox<Object> cmbDobMonth;
-        JComboBox<Object> cmbDobDay;
+import javax.swing.event.ListSelectionListener;
 
 
-        JButton btnAdd;
-        JButton btnClear;
-        JButton btnUpdate;
-        JButton btnDelet;
+public class EmployeeUi extends JFrame{ 
 
-        Color valid;
-        Color invalid;
-        Color initial;
+    JTable employeeTable;
+    JScrollPane jspTable; 
 
-        List<Employee> emplist;
-        List<Gender> genlist;
-        List<Designation> deslist;
-        List<StatusEmployee> selist;
+    Vector titles;
+    Vector data; 
 
-       //Constracter
-        EmployeeUi(){
+    JLabel lblSearchName;
+    JComboBox<Object> cmbSearchGender;
+    JTextField txtSearchName;
+    JLabel lblSearchGender;
+    JButton btnSearch;
+    JButton btnSearchClear;
+
+    JLabel lblName;
+    JLabel lblDob;
+    JLabel lblGender;
+    JLabel lblNic;
+    JLabel lblMobile;
+    JLabel lblEmail;
+    JLabel lblDesignation;
+    JLabel lblStatus;
+    JTextField txtName;
+    JTextField txtNic;
+    JTextField txtMobile;
+    JTextField txtEmail;
+    JComboBox<Object> cmbGender;
+    JComboBox<Object> cmbDesignation;
+    JComboBox<Object> cmbStatusEmployee;
+    JComboBox<Object> cmbDobDay;
+    JComboBox<Object> cmbDobMonth;
+    JComboBox<Object> cmbDobYear;
+    JButton btnAdd;
+    JButton btnClear;
+    JButton btnUpdate;
+    JButton btnDelete; 
+
+    Color valid;
+    Color invalid;
+    Color initial;
+    Color updated;  
+
+    List<Employee> emplist;
+    List<Gender> genlist;
+    List<Designation> deslist;
+    List<StatusEmployee> stelist; 
+
+    Employee oldEmployee;
+
+    EmployeeUi(){ 
 
         valid = new Color(200,255,200);
-        invalid = Color.pink;
-        initial = Color.white;
+        invalid = Color.PINK;
+        initial = Color.WHITE;
+        updated = Color.YELLOW;
 
-        setTitle("Employee Details(Harvest Super)");
-        setLocation(300,200);
-        setSize(660,700);
+        setTitle("EU");
+        setSize(550,600);
+        setLocation(400,100); 
 
         Container con = getContentPane();
-        FlowLayout lay1 = new FlowLayout();
-        con.setLayout(lay1);
+        FlowLayout lay = new FlowLayout();
+            con.setLayout(lay);  
 
-        //Leble
-        JLabel lblNmae = new JLabel("Name  : ");
-        JLabel lblDob = new JLabel("DOB  : ");
-        JLabel lblGender = new JLabel("      Gender  : ");
-        JLabel lblNic = new JLabel("NIC  : ");
-        JLabel lblMobile= new JLabel("Mobile NO : ");
-        JLabel lblEmail = new JLabel("Email  : ");
-        JLabel lblDesignation = new JLabel("Designation  : ");
-        JLabel lblStatus = new JLabel("     StatusEmployee  : ");
-       
-        //Text Filed
-        txtName = new JTextField(52);
-        txtNic = new JTextField(52);
-        txtMobile = new JTextField(50);
-        txtEmail = new JTextField(50);
+        lblName  = new JLabel("Name :");
+        lblDob  = new JLabel("    DOB :");
+        lblGender  = new JLabel("Gender :");
+        lblNic  = new JLabel("   NIC :");
+        lblMobile  = new JLabel(" Mobile :");
+        lblEmail  = new JLabel(" Email :");
+        lblDesignation  = new JLabel("  Designation :");
+        lblStatus  = new JLabel("Status :");
+        txtName  = new JTextField( 40 );
+        txtNic  = new JTextField( 40);
+        txtMobile  = new JTextField( 40 );
+        txtEmail  = new JTextField( 40 );
+        cmbGender  = new JComboBox();
+        cmbDesignation  = new JComboBox();
+        cmbStatusEmployee  = new JComboBox();
+        cmbDobDay  = new JComboBox();                                                           
+        cmbDobMonth  = new JComboBox();                                                    
+        cmbDobYear  = new JComboBox(); 
+        btnAdd = new JButton(" Add ");
+        btnClear = new JButton(" Clear "); 
+        btnUpdate  = new JButton(" Update ");
+        btnDelete  = new JButton(" Delete "); 
 
-       //ComboBox
-        cmbGender =new JComboBox();
-        cmblDesignation =new JComboBox();
-        cmbStatusEmpolyee =new JComboBox();
-        cmbDobYear =new JComboBox();
-        cmbDobMonth =new JComboBox();
-        cmbDobDay =new JComboBox();
+        JLabel lblEndDob = new JLabel("         ");
+        JLabel lblEndGender = new JLabel("                       ");
+        JLabel lblEndDesignation = new JLabel( "                ");
+        JLabel lblEndStatusEmployee = new JLabel( "          ");
+        JLabel lblEndDelete = new JLabel( "........................................................................................................................................................................");
 
-        //Button
-        btnAdd=new JButton("Add");
-        btnClear =new JButton("Clear");
-        btnUpdate =new JButton("Update");
-        btnDelet =new JButton("Delet");  
+            con.add(lblName);
+            con.add(txtName);
+            con.add(lblDob);
+            con.add(cmbDobDay);  con.add(cmbDobMonth);  con.add(cmbDobYear);  con.add( lblEndDob);
+            con.add(lblGender);
+            con.add(cmbGender);  con.add( lblEndGender);
+            con.add(lblNic);
+            con.add(txtNic);
+            con.add(lblMobile);
+            con.add(txtMobile);
+            con.add(lblEmail);
+            con.add(txtEmail);
+            con.add(lblDesignation);
+            con.add(cmbDesignation);  con.add( lblEndDesignation);
+            con.add(lblStatus);
+            con.add(cmbStatusEmployee);  con.add( lblEndStatusEmployee);
+            con.add(btnAdd );
+            con.add(btnClear);
+            con.add(btnUpdate);
+            con.add(btnDelete); con.add(lblEndDelete);
 
-        JLabel lblEmpty= new JLabel("                                                                                                                                                                                                             ");
+                   
+        lblSearchName  = new JLabel("Name :");
+        txtSearchName  = new JTextField( 20 );
+        lblSearchGender  = new JLabel("Gender :");
+        cmbSearchGender  = new JComboBox();
+        btnSearch  = new JButton("Search");
+        btnSearchClear  = new JButton("SearchClear"); 
 
-        con.add(lblNmae);
-        con.add(txtName);
-        con.add(lblDob);
-        con.add(cmbDobYear); con.add(cmbDobMonth); con.add(cmbDobDay);
-        con.add(lblGender);
-        con.add(cmbGender);
-        con.add(lblEmpty);
-        con.add(lblNic);
-        con.add(txtNic);
-        con.add(lblMobile);
-        con.add(txtMobile);
-        con.add(lblEmail);
-        con.add(txtEmail );
-        con.add(lblDesignation);
-        con.add(cmblDesignation);
-        con.add(lblStatus);
-        con.add(cmbStatusEmpolyee);
+        JLabel lblEndSearchGender = new JLabel( "          ");
+        JLabel lblEndSearchClear = new JLabel( "........................................................................................................................................................................");
+        JLabel lblSearch = new JLabel( "            ");
 
-        JLabel lblfristEnd = new JLabel("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        con.add(lblfristEnd);
-        
-        con.add(btnDelet);
-        con.add(btnUpdate);
-        con.add(btnClear);
-        con.add(btnAdd);
+            con.add(lblSearchName); 
+            con.add(txtSearchName); con.add(lblSearch );
+            con.add(lblSearchGender);
+            con.add(cmbSearchGender);  con.add(lblEndSearchGender );
+            con.add(btnSearch);
+            con.add(btnSearchClear); con.add( lblEndSearchClear );
 
-        JLabel lblFormEnd = new JLabel("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        JLabel lblFormEnd2 = new JLabel("\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        con.add(lblFormEnd);
-        con.add(lblFormEnd2);
-        
-        JLabel lblSearchNmae = new JLabel("Name  : ");
-        textSearchName = new JTextField(20);
-        JLabel lblSearchGender = new JLabel("Gender  : ");
-        cmbSearchGender =new JComboBox();
-        JButton btnSearchClear =new JButton("Clear Search");
-        JButton btnSearch =new JButton("Search");
-            
-        con.add(lblSearchNmae);
-        con.add(textSearchName);
-        con.add(lblSearchGender);
-        con.add(cmbSearchGender);
-        
-        JLabel lblfristEnd4 = new JLabel("\n---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        con.add(lblfristEnd4);
-        
-        con.add(btnSearchClear);
-        con.add(btnSearch);
-        
-       JLabel lblSeconEnd = new JLabel("\n.......................................................................................................................................................................................................................................................................................................................................................................\n");
-      con.add(lblSeconEnd);
-      JLabel lblSeconEnd2 = new JLabel("\n.......................................................................................................................................................................................................................................................................................................................................................................\n");
-      con.add(lblSeconEnd2);
-
-      //Table
         titles = new Vector();
         titles.add("Name");
-        titles.add("Dob");
+        titles.add("DOB");
         titles.add("NIC");
         titles.add("Gender");
-        titles.add("Desgination");
+        titles.add("Designation"); 
 
-        Vector data = new Vector();
+        data = new Vector();
 
         DefaultTableModel dataModel = new DefaultTableModel(data,titles);
-        tblEmployee = new JTable();
+        employeeTable = new JTable();
+        employeeTable.setModel(dataModel); 
 
-        tblEmployee.setModel(dataModel);
 
-        JScrollPane jspTable = new JScrollPane();
-        jspTable.setPreferredSize( new Dimension(550,200));
-        jspTable.setViewportView(tblEmployee);
+        jspTable = new JScrollPane();
+            jspTable.setPreferredSize( new Dimension(500,225));
+            jspTable.setViewportView( employeeTable );
+
+        
+        btnSearch.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchAp( e );  }  } );
+        btnSearchClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchClearAp( e );  }  } );
+        btnAdd.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnAddAp( e );  }  } );
+        btnClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnClearAp( e );  }  } );
+        btnUpdate.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnUpdateAp( e );  }  } );
+        
+        employeeTable.getSelectionModel().addListSelectionListener( new ListSelectionListener(){ public void valueChanged( ListSelectionEvent e){ employeeTableVC(e); } } );
+
+        intitialize(); 
 
         con.add(jspTable);
 
-     
-        btnSearch.addActionListener(  new ActionListener(){  public void actionPerformed(ActionEvent e){  btnSearchAp(e);  }  } );
-        btnSearchClear.addActionListener(  new ActionListener(){  public void actionPerformed(ActionEvent e){  btnSearchClearAp(e);  }  } );
-        
-        btnAdd.addActionListener(  new ActionListener(){  public void actionPerformed(ActionEvent e){  btnAddAp(e);  }  } );
-        tblEmployee.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-          public void valueChanged(ListSelectionEvent e) {
-              tblEmployeeVC(e);
-          }
-        });
-   
-
-
-        intitialize();
-
-
     }
-  //Method
-public void intitialize(){
 
-    loadform();
-    loadView();
+    public void intitialize(){ 
 
-}
-public void loadform(){
-//Gender
-  genlist = GenderController.get();
-  Vector<Object> genders = new Vector();
-  genders.add("Select a Gender");
-
-  for(Gender gen: genlist){
-      genders.add(gen);         
-      
-   }
-  
-  DefaultComboBoxModel<Object> genModel = new DefaultComboBoxModel(genders);
-  cmbGender.setModel(genModel); 
-
-//Designation
-  deslist = DesignationController.get();
-  Vector<Object> designations = new Vector();
-  designations.add("Select a Designation");
-
-  for(Designation des: deslist){
-    designations.add(des);         
-      
-   }
-  
-  DefaultComboBoxModel<Object> desModel = new DefaultComboBoxModel(designations);
-  cmblDesignation.setModel(desModel); 
-
-   
-//StatusEmployee
-selist = StatusEmployeeController.get();
-Vector<Object> statusEmployees = new Vector();
-statusEmployees.add("Select StatusEmployee");
-
-for(StatusEmployee se: selist){
-  statusEmployees.add(se);         
-    
-}
-DefaultComboBoxModel<Object> seModel = new DefaultComboBoxModel(statusEmployees);
-cmbStatusEmpolyee.setModel(seModel); 
-  //DobDay
-
-Vector<Object> DobDay = new Vector();
-DobDay.add("Selec Day");
-
-for(int i=1; i<=31;i++){
-  DobDay.add(i);         
-    
-}
-DefaultComboBoxModel<Object> dayModel = new DefaultComboBoxModel(DobDay);
-cmbDobDay.setModel(dayModel);
-
-  //DobManth
-
-  Vector<Object> DobManth = new Vector();
-  DobManth.add("Select Manth");
-  
-  for(int i=1; i<=12; i++){
-    DobManth.add(i);         
-      
-  }
-  DefaultComboBoxModel<Object> ManModel= new DefaultComboBoxModel(DobManth);
-  cmbDobMonth.setModel(ManModel);
-
-    //DobYear
-
-    Vector<Object> DobYear = new Vector();
-    DobYear.add("Select Year");
-    
-    for(int i=1980; i<=2005;i++){
-      DobYear.add(i);         
-        
+        loadForm();
+        loadView();
     }
-   cmbDobYear.setModel( new DefaultComboBoxModel(DobYear));
 
-   txtName.setText("");
-   txtNic.setText("");
-   txtEmail.setText("");
-   txtMobile.setText("");
+    public void loadForm(){
 
-    enabledButtons(true,false,false);
-    setStyle(initial);
+        genlist = GenderController.get(); 
+            Vector<Object> genders = new Vector();
+            genders.add("Select Gender");
+
+                for(Gender gen : genlist){ 
+
+                    genders.add(gen);
+                } 
+
+        DefaultComboBoxModel<Object> gndModel = new DefaultComboBoxModel(genders);
+        cmbGender.setModel(gndModel); 
+
+
+        deslist = DesignationController.get(); 
+            Vector<Object> designations = new Vector();
+            designations.add("Select Designation");
+
+                for(Designation des : deslist){ 
+
+                    designations.add(des);
+                } 
+
+        DefaultComboBoxModel<Object> desModel = new DefaultComboBoxModel(designations);
+        cmbDesignation.setModel(desModel);
+
+        
+        stelist = StatusEmployeeController.get(); 
+            Vector<Object> statusEmployees = new Vector();
+            statusEmployees.add("Select StatusEmployee");
+
+                for(StatusEmployee ste : stelist){ 
+
+                    statusEmployees.add(ste);
+                } 
+
+        DefaultComboBoxModel<Object> steModel = new DefaultComboBoxModel(statusEmployees);
+        cmbStatusEmployee.setModel(steModel);
+
+
+        Vector<Object> dobDay = new Vector();
+        dobDay.add("Select");
+
+                for( int i=1; i<=31; i++)
+                dobDay.add(i);
+
+        DefaultComboBoxModel<Object> dobDayModel = new DefaultComboBoxModel(dobDay );
+        cmbDobDay.setModel(dobDayModel);
+
+        Vector<Object> dobMonth = new Vector();
+        dobMonth.add("Select");
+
+                for( int i=1; i<=12; i++)
+                dobMonth.add(i);
+
+        cmbDobMonth.setModel(new DefaultComboBoxModel(dobMonth )); 
+
+        Vector<Object> dobYear = new Vector();
+        dobYear.add("Select");
+
+                for( int i=1980; i<=2005; i++)
+                dobYear.add(i);
+
+        cmbDobYear.setModel(new DefaultComboBoxModel(dobYear )); 
+
+        txtName.setText("");
+        txtNic.setText("");
+        txtMobile.setText("");
+        txtEmail.setText("");
+
+        enableButtons(true, false, false);
+        setStyle( initial );
 
     }
 
-public void enabledButtons(boolean add, boolean upd,boolean delt){
-    btnAdd.setEnabled(add);
-    btnUpdate.setEnabled(upd);
-    btnDelet.setEnabled(delt);
+    public void enableButtons(boolean add , boolean upd , boolean del){
 
-}
+        btnAdd.setEnabled(add);
+        btnUpdate.setEnabled(upd);
+        btnDelete.setEnabled(del);
+    } 
 
-public void setStyle(Color clr){
-  
-  txtName.setBackground(clr);
-  txtMobile.setBackground(clr);
-  txtNic.setBackground(clr);
-  txtEmail.setBackground(clr);
+    public void setStyle( Color clr){ 
 
-
-  cmblDesignation.setBackground(clr);
-  cmbStatusEmpolyee.setBackground(clr);
-  cmbGender.setBackground(clr);
-
-  cmbDobDay.setBackground(clr);
-  cmbDobMonth.setBackground(clr);
-  cmbDobYear.setBackground(clr);
-
-
-}
-public void fillForm(){
-
-  enabledButtons(false,true,true);
-  setStyle(valid);
-}
-
-
-public void loadView(){
-    emplist = EmployeeController.get(null);
-    fillTable(emplist);
-
-    List<Gender> genlist = GenderController.get();
-    Vector<Object> genders = new Vector();
-    genders.add("Select a Gender");
-
-    for(Gender gen: genlist){
-        genders.add(gen);         
         
-     }
+        txtName.setBackground(clr);
+        txtMobile.setBackground(clr);
+        txtEmail.setBackground(clr);
+        txtNic.setBackground(clr);
+
+        cmbDesignation.setBackground(clr);
+        cmbGender.setBackground(clr);
+        cmbStatusEmployee.setBackground(clr);
+        cmbDobDay.setBackground(clr);
+        cmbDobMonth.setBackground(clr);
+        cmbDobYear.setBackground(clr);
     
-    DefaultComboBoxModel<Object> genModel = new DefaultComboBoxModel(genders);
-    cmbSearchGender.setModel(genModel); 
+    } 
 
+    public void fillForm(){ 
 
+        enableButtons(false, true, true);
+        setStyle(valid );
+    }
 
-}
+    public void loadView(){ 
 
+        emplist = EmployeeController.get(null);
+        fillTable(emplist); 
 
-public void fillTable( List<Employee> employees){
-  
-    Vector data =new Vector();
-    for(Employee emp: employees){
-    Vector r = new Vector();
-    r.add(emp.getName());
-    r.add(emp.getDob().toString());
-    r.add(emp.getNic());
-    r.add(emp.getGender().getName());
-    r.add(emp.getDesignation().getName());
+        List<Gender> genlist = GenderController.get(); 
+            Vector<Object> genders = new Vector();
+            genders.add("Select Gender");
 
-    data.add(r);
-    
+                for(Gender gen : genlist){ 
 
-}
-DefaultTableModel dataModel = new DefaultTableModel(data, titles);
-tblEmployee.setModel(dataModel);
- 
-}
-public void btnSearchAp(ActionEvent e){
+                    genders.add(gen);
+                } 
 
-    String name  =textSearchName.getText();
+        DefaultComboBoxModel<Object> gndModel = new DefaultComboBoxModel(genders);
+        cmbSearchGender.setModel(gndModel);
+    }
 
-    Object stitem = cmbSearchGender.getSelectedItem();
-    Gender gender = null;
+    public void fillTable(List<Employee> employees){ 
 
-    if(!stitem.equals("Select a Gender"))
-    gender = (Gender) stitem;   
+        Vector data = new Vector();
+        
+        for(Employee emp : employees){ 
 
-  Hashtable<String,Object> ht = new Hashtable();
-  ht.put("name",name);
-  if(gender!=null) ht.put("gender",gender);
-
-  emplist= EmployeeController.get(ht);
-  fillTable(emplist);
-}
-
-public void btnSearchClearAp(ActionEvent e){
-
-   int opt = JOptionPane.showConfirmDialog(null,"Are you sure to clear the clear");
-
-    if(opt!=1){
-
-    textSearchName.setText("");
-    cmbSearchGender.setSelectedIndex(0);
-
-   emplist = EmployeeController.get(null);
-  fillTable(emplist);
-}
-}
-public void btnAddAp(ActionEvent e){
-
-    Employee employee = new Employee();  
-
-    String error ="";
-    
-    //Name
-    String name = txtName.getText();
-    if(name.matches("^[A-Z][a-z]*$"))
-        {
-          employee.setName(name);
-          txtName.setBackground(valid);
+            Vector r1 = new Vector();
+                r1.add( emp.getName());
+                r1.add( emp.getDob().toString() );
+                r1.add( emp.getNic() );
+                r1.add( emp.getGender().getName() );
+                r1.add( emp.getDesignation().getName() );
+                data.add(r1);
         }
-    else
-      {
-        txtName.setBackground(invalid);
-        error =error +"\n invalid Name";
-      }
-    
-    //NIC
-    String nic = txtNic.getText();
-    if(nic.matches("^[0-9]{9}V$"))
-      {
-        employee.setNic(nic);
-        txtNic.setBackground(valid);
-      }
-    else
-    {
-      txtNic.setBackground(invalid);
-      error =error +"\n invalid NIC";
-    }
-
-    //Email
-    String email = txtEmail.getText();
-    if(email.matches("^[a-z]*@[a-z]*.[a-z]*$"))
-      {
-        employee.setEmail(email);
-        txtEmail.setBackground(valid);
-      }
-    else
-    {
-      txtEmail.setBackground(invalid);
-      error =error +"\n invalid Email";
-    }
-     
-    //Mobile
-    String mobile = txtMobile.getText();
-    if(mobile.matches("^[0-9]{10}$"))
-      {
-        employee.setMobile(mobile);
-        txtMobile.setBackground(valid);
-      }
-    else
-    {
-      txtMobile.setBackground(invalid);
-      error =error +"\n invalid Mobile";
-    }
-  
-    //Gender
-    int gendindex = cmbGender.getSelectedIndex();
-    if(gendindex != 0){
-      cmbGender.setBackground(valid);
-      employee.setGender((Gender)cmbGender.getSelectedItem() );
-    }
-    else{
-      cmbGender.setBackground(invalid);
-      error =error +"\n Gender Not selected";
-    }
-    //Designation
-    int desindex = cmblDesignation.getSelectedIndex();
-    if(desindex != 0){
-      cmblDesignation.setBackground(valid);
-      employee.setDesignation((Designation)cmblDesignation.getSelectedItem() );
-    }
-    else{
-      cmblDesignation.setBackground(invalid);
-      error =error +"\n Designation Not selected";
-    }
-    // StatusEmployee
-    int Seindex = cmbStatusEmpolyee.getSelectedIndex();
-    if(Seindex != 0){
-      cmbStatusEmpolyee.setBackground(valid);
-      employee.setStatusEmployee((StatusEmployee)cmbStatusEmpolyee.getSelectedItem() );
-    }
-    else{
-      cmbStatusEmpolyee.setBackground(invalid);
-      error =error +"\n StatusEmployee Not selected";
-    }
-
-
-    //Day,manth,year
-
-    int dayindex = cmbDobDay.getSelectedIndex();
-    int monindex = cmbDobMonth.getSelectedIndex();
-    int yerindex = cmbDobYear.getSelectedIndex();
-
-    String day = "";
-    String mon = "";
-    String yer = "";
-
-    if(dayindex != 0){
-      cmbDobDay.setBackground(valid);
-      day = cmbDobDay.getSelectedItem().toString();
-      if(day.length()==1) day = "0" + day;
-    }
-    else{
-      cmbDobDay.setBackground(invalid);
-    
-    }
-    if(monindex != 0){
-      cmbDobMonth.setBackground(valid);
-      mon = cmbDobMonth.getSelectedItem().toString();
-      if(mon.length()==1) mon= "0" + mon;
-    }
-    else{
-      cmbDobMonth.setBackground(invalid);
-    
-    }
-    if(yerindex != 0){
-      cmbDobYear.setBackground(valid);
-      yer = cmbDobYear.getSelectedItem().toString();
-    }
-    else{
-      cmbDobYear.setBackground(invalid);
-    
-    }
-  
-
-
-
-    if(dayindex != 0 && monindex !=0 && yerindex !=0 ){
-      String dobs = yer+"-"+mon+"-"+day;
-      LocalDate dob = LocalDate.parse(dobs);
-      employee.setDob(dob);
-    }
-    else{
-   
-      error =error +"\n selecte Birth Date";
-    }
-
-
-    if(error.isEmpty()){
-
-
-      String cnfMsg = "Are you sure to save following Employee?\n\n";
-      cnfMsg = cnfMsg+"\nName :" +employee.getName();
-      cnfMsg = cnfMsg+"\nNic :" +employee.getNic();
-      cnfMsg = cnfMsg+"\nDOB :" +employee.getDob().toString();
-      cnfMsg = cnfMsg+"\nGender :" +employee.getGender().getName();
-      cnfMsg = cnfMsg+"\nMobile :" +employee.getMobile();
-      cnfMsg = cnfMsg+"\nEmail :" +employee.getEmail();
-      cnfMsg = cnfMsg+"\nDesignation :" +employee.getDesignation().getName();
-      cnfMsg = cnfMsg+"\nStatusEmployee :" +employee.getStatusEmployee().getName();
-
-     int cof= JOptionPane.showConfirmDialog(null,cnfMsg);
-
-
-          if(cof==0){
-            String st= EmployeeController.post(employee);
-            if(st.equals("1")){
-              loadView();
-              loadform();
-              JOptionPane.showMessageDialog(null,"Successfully saved");
-          }else{
-            JOptionPane.showMessageDialog(null,"Faild to save as \n\n" +st);
-          }
         
+        DefaultTableModel model =  new DefaultTableModel(data , titles); 
+        employeeTable.clearSelection();
+        employeeTable.setModel(model);
+
+        
+    }
+
+    public void btnSearchAp(ActionEvent e){ 
+
+        String name = txtSearchName.getText();
+        Object sitem = cmbSearchGender.getSelectedItem();
+        Gender gender = null; 
+
+        if(!sitem.equals("Select Gender"))
+        gender = (Gender) sitem;
+
+        Hashtable<String , Object> ht = new Hashtable();
+        ht.put("name", name);
+        if(gender!=null)ht.put("gender", gender);
+
+        List<Employee> employees = EmployeeController.get(ht);
+        fillTable(employees); 
+
+    } 
+
+    public void btnSearchClearAp(ActionEvent e){ 
+
+        int opt = JOptionPane.showConfirmDialog(null,"Are you sure to Clear the Search");
+
+        if(opt!=1){
+
+        txtSearchName.setText(" ");
+        cmbSearchGender.setSelectedIndex(0);
+
+        List<Employee> employees = EmployeeController.get(null);
+        fillTable(employees);  
+
         }
-      }
-    else{ 
-    JOptionPane.showMessageDialog(null,error);
+    }
+
+    public void btnAddAp(ActionEvent e){
+
+        Employee employee = new Employee();
+        String error = "";
+
+        String name = txtName.getText();
+            if( name.matches("^[A-Z][a-z]*$")){
+                employee.setName(name);
+                txtName.setBackground(valid);
+            }
+            else{ 
+                txtName.setBackground(invalid);
+                error = error + "\n Invalid Name";
+            } 
+
+        String nic = txtNic.getText();
+            if( nic.matches("^[0-9]{9}V$")){
+                employee.setNic(nic);
+                txtNic.setBackground(valid);
+            }
+            else{ 
+                txtNic.setBackground(invalid);
+                error = error + "\n Invalid NIC";
+            }
+            
+        String email = txtEmail.getText();
+            if( email.matches("^[a-z]*@[a-z]*.[a-z]*$")){
+                employee.setEmail(email);
+                txtEmail.setBackground(valid);
+            }
+            else{ 
+                txtEmail.setBackground(invalid);
+                error = error + "\n Invalid Email";
+            }
+            
+        String mobile = txtMobile.getText();
+            if(  mobile.matches("^0[0-9]{9}$")){
+                employee.setMobile( mobile);
+                txtMobile.setBackground(valid);
+            }
+            else{ 
+                txtMobile.setBackground(invalid);
+                error = error + "\n Invalid Mobile";
+            } 
+
+        int genindex = cmbGender.getSelectedIndex();
+            if( genindex!=0){
+                cmbGender.setBackground(valid);
+                employee.setGender( (Gender)cmbGender.getSelectedItem() );
+            }
+            else{ 
+                cmbGender.setBackground(invalid);
+                error = error + "\n Gender not Selected";
+            } 
+
+        int desindex = cmbDesignation.getSelectedIndex();
+            if( desindex!=0){
+                cmbDesignation.setBackground(valid);
+                employee.setDesignation( (Designation)cmbDesignation.getSelectedItem() );
+            }
+            else{ 
+                cmbDesignation.setBackground(invalid);
+                error = error + "\n Designation not Selected";
+            } 
+        
+        int steindex = cmbStatusEmployee.getSelectedIndex();
+            if( steindex!=0){
+                cmbStatusEmployee.setBackground(valid);
+                employee.setStatusEmployee( (StatusEmployee)cmbStatusEmployee.getSelectedItem() );
+            }
+            else{ 
+                cmbStatusEmployee.setBackground(invalid);
+                error = error + "\n StatusEmployee not Selected";
+            } 
+
+
+        int dayIndex = cmbDobDay.getSelectedIndex();
+        int monIndex = cmbDobMonth.getSelectedIndex();
+        int yerIndex = cmbDobYear.getSelectedIndex(); 
+
+            String day = " ";
+            String mon = " ";
+            String yer = " ";
+
+            if(dayIndex!=0){ 
+                cmbDobDay.setBackground(valid);
+                day = cmbDobDay.getSelectedItem().toString();
+                if(day.length()==1) day = "0" + day;
+            }
+            else{
+                cmbDobDay.setBackground(invalid);
+            }
+
+            if(monIndex!=0){ 
+                cmbDobMonth.setBackground(valid);
+                mon = cmbDobMonth.getSelectedItem().toString();
+                if(mon.length()==1) mon = "0" + mon;
+            }
+            else{
+                cmbDobMonth.setBackground(invalid);
+            }
+
+            if(yerIndex!=0){ 
+                cmbDobYear.setBackground(valid);
+                yer = cmbDobYear.getSelectedItem().toString();
+            }
+            else{
+                cmbDobYear.setBackground(invalid); 
+            } 
+
+            if(dayIndex !=0 && monIndex !=0 && yerIndex !=0){
+                String dobs = yer+"-"+mon+"-"+day;
+                LocalDate dob = LocalDate.parse(dobs);
+                employee.setDob(dob);
+            }
+            else{ 
+                error = error + "\n Select Birth Date";
+            } 
+
+        if(error.isEmpty()){
+            
+            String cnfmsg = "Are you sure to save following Employee?\n\n";
+            cnfmsg =  cnfmsg + "\nName : " + employee.getName();
+            cnfmsg =  cnfmsg + "\nNic : " + employee.getNic();
+            cnfmsg =  cnfmsg + "\nDOB : " + employee.getDob().toString();
+            cnfmsg =  cnfmsg +  "\nGender : " + employee.getGender().getName();
+            cnfmsg =  cnfmsg + "\nEmail : " + employee.getEmail();
+            cnfmsg =  cnfmsg + "\nMobile: " + employee.getMobile();
+            cnfmsg =  cnfmsg + "\nName : " + employee.getDesignation().getName();
+            cnfmsg =  cnfmsg + "\nStatus : " + employee.getStatusEmployee().getName();
+
+            int conf = JOptionPane.showConfirmDialog(null,cnfmsg);
+            
+            if(conf==0){ 
+                String st = EmployeeController.post(employee);
+                if(st.equals("1")){
+                    loadView();
+                    loadForm();
+                    JOptionPane.showConfirmDialog(null,"Successfully Saved");
+                }
+                else
+                    JOptionPane.showConfirmDialog(null,"Failed to Save as \n\n"+st);
+            }
+                                            
+        }
+        else{
+            JOptionPane.showMessageDialog(null, error);
+        }
 
     }
-      
+
+    public void employeeTableVC(ListSelectionEvent e){
+        int row = employeeTable.getSelectedRow();
+        if(row>-1){
+            Employee employee = emplist.get(row);
+            fillForm(employee);
+        }
+    }
+
+    public void fillForm(Employee employee){
+
+        oldEmployee = employee;
+
+        txtName.setText(employee.getName());
+        txtNic.setText(employee.getNic());
+        txtMobile.setText(employee.getMobile());
+        txtEmail.setText(employee.getEmail());
+
+        for(Gender gen : genlist){ 
+            if(gen.equals (employee.getGender() ) ){ 
+                cmbGender.setSelectedItem(gen); 
+                break; } } 
+
+        for(Designation des : deslist){ 
+            if(des.equals (employee.getDesignation())){ 
+                cmbDesignation.setSelectedItem(des); 
+                break; } } 
+
+        for(StatusEmployee ste : stelist){ 
+            if(ste.equals (employee.getStatusEmployee())){ 
+                cmbStatusEmployee.setSelectedItem(ste); 
+                break; } } 
+
+        cmbDobDay.setSelectedItem( employee.getDob().getDayOfMonth() );
+        cmbDobMonth.setSelectedItem( employee.getDob().getMonthValue() );
+        cmbDobYear.setSelectedItem( employee.getDob().getYear() ); 
+
+        enableButtons(false, true, true);
+        setStyle(valid);
+
+    }
+
+    public void btnClearAp(ActionEvent e){ 
+         int conf = JOptionPane.showConfirmDialog(null,"Are you sure to clear the form?" );
+         if(conf==0) loadForm();
+    }
+
+    public String getErrors(){ String errors=""; return errors; }
+
+    public String getUpdates(){ String updates=""; return updates; }
+
+    public void btnUpdateAp(ActionEvent e){ 
+
+        Employee employee = new Employee();
+        employee.setId( oldEmployee.getId());
+
+        String error = "";
+        String updates = "";
+
+        String name = txtName.getText(); 
+
+        
+            if( name.matches("^[A-Z][a-z]*$")){
+             
+                if(  name.equals(oldEmployee.getName())){
+                    txtName.setBackground(valid);
+                }
+                else{ 
+                    txtName.setBackground(updated); 
+                    updates = updates + "\n Name Updated "; 
+                   }
+                   
+                   employee.setName(name);
+            }
+            else{ 
+                txtName.setBackground(invalid);
+                error = error + "\n Invalid Name";
+            } 
+
+        String nic = txtNic.getText();
+            if( nic.matches("^[0-9]{9}V$")){ 
+                if(nic.equals(oldEmployee.getNic()))
+                txtNic.setBackground(valid);
+            else
+                {txtNic.setBackground(updated); 
+                updates = updates + "\n NIC Updated ";                    
+                }
+                employee.setNic(nic);
+            }
+            
+            else{ 
+                txtNic.setBackground(invalid);
+                error = error + "\n Invalid NIC";
+            }
+            
+        String email = txtEmail.getText();
+            if( email.matches("^[a-z]*@[a-z]*.[a-z]*$")){
+                if(email.equals(oldEmployee.getEmail()))
+                txtEmail.setBackground(valid);
+                
+            else
+                {txtEmail.setBackground(updated); 
+                updates = updates + "\n Email Updated "; 
+            }
+            employee.setEmail(email);
+        }
+            else{ 
+                txtEmail.setBackground(invalid);
+                error = error + "\n Invalid Email";
+            }
+            
+        String mobile = txtMobile.getText();
+            if(  mobile.matches("^0[0-9]{9}$")){
+                if(mobile.equals(oldEmployee.getMobile()))
+                txtMobile.setBackground(valid);
+
+            else
+                {txtMobile.setBackground(updated); 
+                updates = updates + "\n Mobile Updated "; 
+            }
+            employee.setMobile(mobile);
+        }
+            else{ 
+                txtMobile.setBackground(invalid);
+                error = error + "\n Invalid Mobile";
+            }
+
+        int genindex = cmbGender.getSelectedIndex();
+            if( genindex!=0){
+                Gender gender = (Gender) cmbGender.getSelectedItem();
+
+                if(gender.equals(oldEmployee.getGender())){
+                cmbGender.setBackground(valid); }
+                
+
+                else{
+                    cmbGender.setBackground(updated);
+                    updates = updates + "\n Gender Updated "; 
+                }
+                employee.setGender( (Gender)cmbGender.getSelectedItem() );
+            }
+            else{ 
+                cmbGender.setBackground(invalid);
+                error = error + "\n Gender not Selected";
+            } 
+
+       int desindex = cmbDesignation.getSelectedIndex();
+            if( desindex!=0){
+                Designation designation = (Designation)cmbDesignation.getSelectedItem();
+
+                if(designation.equals(oldEmployee.getDesignation())){
+                cmbDesignation.setBackground(valid);
+                
+                }
+                else{
+                    cmbDesignation.setBackground(updated);
+                    updates = updates + "\n Designation Updated "; 
+                }
+
+                employee.setDesignation( (Designation)cmbDesignation.getSelectedItem() );
+            }
+            else{ 
+                cmbDesignation.setBackground(invalid);
+                error = error + "\n Designation not Selected";
+            } 
+        
+        int steindex = cmbStatusEmployee.getSelectedIndex();
+            if( steindex!=0){
+                StatusEmployee statusEmployee = (StatusEmployee)cmbStatusEmployee.getSelectedItem();
+
+                if(statusEmployee.equals(oldEmployee.getStatusEmployee())){
+                cmbStatusEmployee.setBackground(valid);
+                
+            }
+                 else{
+                    cmbStatusEmployee.setBackground(updated);
+                    updates = updates + "\n StatusEmployee Updated "; 
+                }
+
+            employee.setStatusEmployee( (StatusEmployee)cmbStatusEmployee.getSelectedItem() );
+        }
+            else{ 
+                cmbStatusEmployee.setBackground(invalid);
+                error = error + "\n StatusEmployee not Selected";
+            } 
+
+
+        int dayIndex = cmbDobDay.getSelectedIndex();
+        int monIndex = cmbDobMonth.getSelectedIndex();
+        int yerIndex = cmbDobYear.getSelectedIndex(); 
+
+            String day = " ";
+            String mon = " ";
+            String yer = " ";
+
+            if(dayIndex!=0){ 
+                cmbDobDay.setBackground(valid);
+                day = cmbDobDay.getSelectedItem().toString();
+                if(day.length()==1) day = "0" + day;
+            }
+            else{
+                cmbDobDay.setBackground(invalid);
+            }
+
+            if(monIndex!=0){ 
+                cmbDobMonth.setBackground(valid);
+                mon = cmbDobMonth.getSelectedItem().toString();
+                if(mon.length()==1) mon = "0" + mon;
+            }
+            else{
+                cmbDobMonth.setBackground(invalid);
+            }
+
+            if(yerIndex!=0){ 
+                cmbDobYear.setBackground(valid);
+                yer = cmbDobYear.getSelectedItem().toString();
+            }
+            else{
+                cmbDobYear.setBackground(invalid); 
+            } 
+
+            if(dayIndex !=0 && monIndex !=0 && yerIndex !=0){
+                String dobs = yer+"-"+mon+"-"+day;
+                LocalDate dob = LocalDate.parse(dobs);
+                employee.setDob(dob);
+                if(employee.getDob().getDayOfMonth()==oldEmployee.getDob().getDayOfMonth() ){
+                    cmbDobDay.setBackground(valid);
+                    cmbDobMonth.setBackground(valid);
+                    cmbDobYear.setBackground(valid); 
+                }
+                else{
+                    cmbDobDay.setBackground(updated);
+                    cmbDobMonth.setBackground(updated);
+                    cmbDobYear.setBackground(updated); 
+                }
+            }
+            else{ 
+                error = error + "\n Select Birth Date";
+            } 
+
+        if(error.isEmpty() ){ 
+                
+                if(!updates.isEmpty()){
+                    int resp = JOptionPane.showConfirmDialog(null,"You have following Updates\n\n"+updates);
+                    if(resp==0){ 
+                        String status = EmployeeController.put(employee);
+                        if(status.equals("1")){
+                            int lsrow = employeeTable.getSelectedRow(); 
+                            loadView();
+                            //loadForm();
+                            employeeTable.setRowSelectionInterval(lsrow, lsrow);
+                            loadForm();
+                            JOptionPane.showMessageDialog(null, "Succesfully Update ");
+                            
+                        }
+
+                        else{ 
+                            JOptionPane.showMessageDialog(null, "Failed to Update as \n\n"+status);
+                        }
+                    }
+                }else{
+                JOptionPane.showMessageDialog(null, "Nothing to be updated");
+                }
+            }else{
+            JOptionPane.showMessageDialog(null, "You have following Data errors\n\n"+error);
+        }
+
+    }
+   
 }
-
-
-public void tblEmployeeVC(ListSelectionEvent e)
-{
- int row = tblEmployee.getSelectedRow(); 
- if(row>-1){
- Employee employee = emplist.get(row);
-  fillForm(employee);
- }
-}
-public void fillForm(Employee employee){
-  txtName.setText(employee.getName());
-  txtNic.setText(employee.getNic());
-  txtMobile.setText(employee.getMobile());
-  txtEmail.setText(employee.getEmail());
-  
-  
-  for(Gender gen: genlist){
-  if(gen.equals( employee.getGender()))
-  {
-    cmbGender.setSelectedItem( gen );
-    break;
-  }    
-    
- }
- for(Designation en: deslist){
-  if(en.getId()==employee.getDesignation().getId())
-  {
-    cmblDesignation.setSelectedItem(en);
-    break;
-  }    
-    
- }
-
- for(StatusEmployee se: selist){
-  if(se.getId()==employee.getStatusEmployee().getId())
-  {
-    cmbStatusEmpolyee.setSelectedItem(se);
-    break;
-  }    
-    
- }
- 
-cmbDobDay.setSelectedItem(employee.getDob().getDayOfMonth());
-cmbDobMonth.setSelectedItem(employee.getDob().getMonthValue());
-cmbDobYear.setSelectedItem(employee.getDob().getYear());
-
-enabledButtons(false,true,true);
-setStyle(valid);
-}
-
-   }
-  
-  

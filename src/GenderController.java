@@ -1,12 +1,23 @@
 import java.util.List;
 
-public class GenderController{
 
-public static List<Gender> get(){
+/*
+    public class EmployeeController{ 
 
-    List<Gender> genders = GenderDao.getAll();
+        public static List<Employee> get(){ 
 
-    return genders;
+            List<Employee> employees = EmployeeDao.getAll();
+            return employees;
 
-}
+
+    } */
+
+    public class GenderController{ 
+
+        public static List<Gender> get(){ 
+
+            List<Gender> genders = GenderDao.getAll();
+            return genders;
+
+        }
 }

@@ -1,24 +1,18 @@
-public class Gender{
+public class Gender{  
 
     private int id;
     private String name;
 
-    Gender(){    }
+    Gender(){ }
 
-    public void setId(int id){ this.id = id; }
-    public int getId(){ return id; }
+        public void setId(int id){ this.id = id; }
+        public int getId(){ return id; }
 
-    public void setName(String name){ this.name = name; }
-    public String getName(){ return name; }
+        public void setName(String name){ this.name = name; }
+        public String getName(){ return name; } 
 
-    @Override
-    public String toString(){
+        public String toString(){ return name; } 
 
-        return name;
-    }
-    public boolean equals(Gender obj){
-
-        return obj.id==this.id;
-    }
+        public boolean equals(Gender obj){ return obj.id==this.id; }
 
 }
