@@ -61,6 +61,7 @@ public class  ItemUi extends JFrame {
     Color valid;
     Color invalid;
     Color initial;
+    Color updated; 
 
     JLabel lblName;
     JLabel lblBrand;
@@ -87,12 +88,16 @@ public class  ItemUi extends JFrame {
     List<SubCategory> sublist;
     List<StatusItem> stalist;
 
+    Item olditem;
+
     //Constracter
     ItemUi() {
 
         valid = new Color(200,255,200);
         invalid = Color.pink;
         initial = Color.white;
+        updated = Color.YELLOW;
+
 
         setTitle("Item");
         setLocation(200, 300);
@@ -196,7 +201,6 @@ public class  ItemUi extends JFrame {
         titles = new Vector();
         titles.add("Brand");
         titles.add("Name");
-        titles.add("Code");
         titles.add("SubCategory");
         titles.add("PricePurchase");
         titles.add("PriceSale");
@@ -219,6 +223,9 @@ public class  ItemUi extends JFrame {
         btnSearch.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchAp( e );  }  } );
         btnSearchClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchClearAp( e );  }  } );
         btnAdd.addActionListener(  new ActionListener(){  public void actionPerformed(ActionEvent e){  btnAddAp(e);  }  } );
+        btnClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnClearAp( e );  }  } );
+        btnUpdate.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnUpdateAp( e );  }  } );
+        btnDelet.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnDeleteAp( e );  }  } );
         tblItem.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 tblItemVC(e);
@@ -630,6 +637,9 @@ public class  ItemUi extends JFrame {
     }
 
     public void fillForm(Item item){
+
+        olditem = item;
+
         txtName.setText(item.getName());
         txtCode.setText(item.getCode());
         txtPricePurchase.setText(item.getPricePurchase().toString());
@@ -664,6 +674,252 @@ public class  ItemUi extends JFrame {
 
         enabledButtons(false,true,true);
         setStyle(valid);
+    }
+
+    public void btnClearAp(ActionEvent e){ 
+        int conf = JOptionPane.showConfirmDialog(null,"Are you sure to clear the form?" );
+        if(conf==0) loadform();
+    }
+
+    public String getErrors(){ String errors=""; return errors; }
+
+    public String getUpdates(){ String updates=""; return updates; }
+
+    public void btnUpdateAp(ActionEvent e){ 
+
+       Item item = new Item();
+       item.setId(olditem.getId());
+
+        String error = "";
+        String updates = "";
+
+        //Name
+        String name = txtName.getText(); 
+        if( name.matches("^[A-Za-z]+$")){
+            
+            if( name.equals(olditem.getName())){
+                txtName.setBackground(valid);
+            }else{ 
+                txtName.setBackground(updated); 
+                updates = updates + "\n Name Updated "; 
+            }
+            item.setName(name);
+        }else{ 
+            txtName.setBackground(invalid);
+            error = error + "\n Invalid Name";
+        } 
+
+        //Code
+        String code = txtCode.getText();
+        if(code.matches("^\\d{1,5}$")){
+            if(code.equals(olditem.getCode())){
+                txtCode.setBackground(valid);
+            }else{
+                txtCode.setBackground(updated); 
+                updates = updates + "\n Code Updated ";                    
+            }
+            item.setCode(code);
+        }else{ 
+            txtCode.setBackground(invalid);
+            error = error + "\n Invalid Code";
+        }
+        
+        //PricePurchase
+        String pricepurchase = txtPricePurchase.getText();
+        if(pricepurchase.matches("^\\d{1,6}(.\\d{2})?$")){
+            if(pricepurchase.equals(olditem.getPricePurchase())){
+                txtPricePurchase.setBackground(valid);
+            }else{
+                txtPricePurchase.setBackground(updated); 
+                updates = updates + "\n Price Purchase Updated ";                    
+            }
+            item.setPricePurchase(Double.parseDouble(pricepurchase));
+        }else{ 
+            txtPricePurchase.setBackground(invalid);
+            error = error + "\n Invalid Price Purchase";
+        }
+
+        //PriceSale
+        String pricesale = txtPriceSale.getText();
+        if(pricesale.matches("^\\d{1,6}(.\\d{2})?$")){
+            if(pricesale.equals(olditem.getPriceSale())){
+                txtPriceSale.setBackground(valid);
+            }else{
+                txtPriceSale.setBackground(updated); 
+                updates = updates + "\n Price Sale Updated ";                    
+            }
+            item.setPriceSale(Double.parseDouble(pricesale));
+        }else{ 
+            txtPriceSale.setBackground(invalid);
+            error = error + "\n Invalid Price Sale";
+        }
+
+        //QOH
+        String qoh = txtQOH.getText();
+        if(qoh.matches("^\\d{1,5}$")){
+            if(qoh.equals(olditem.getQOH())){
+                txtQOH.setBackground(valid);
+            }else{
+                txtQOH.setBackground(updated); 
+                updates = updates + "\nQOH Updated ";                    
+            }
+            item.setQOH(Integer.parseInt(qoh));
+        }else{ 
+            txtQOH.setBackground(invalid);
+            error = error + "\n Invalid QOH";
+        }
+
+        //ROP
+        String rop = txtROP.getText();
+        if(rop.matches("^\\d{1,5}$")){
+            if(rop.equals(olditem.getROP())){
+                txtROP.setBackground(valid);
+            }else{
+                txtROP.setBackground(updated); 
+                updates = updates + "\nROP Updated ";                    
+            }
+            item.setROP(Integer.parseInt(rop));
+        }else{ 
+            txtROP.setBackground(invalid);
+            error = error + "\n Invalid QOH";
+        }
+
+        //Brand
+        int brandindex = cmbBrand.getSelectedIndex();
+        if(brandindex != 0){
+            Brand brand = (Brand) cmbBrand.getSelectedItem();
+            if(brand.equals(olditem.getBrand())){
+                cmbBrand.setBackground(valid); 
+            }else{
+                cmbBrand.setBackground(updated);
+                updates = updates + "\n Brand Updated "; 
+            }
+            item.setBrand((Brand)cmbBrand.getSelectedItem() );
+        }else{ 
+            cmbBrand.setBackground(invalid);
+            error = error + "\n Brand not Selected";
+        } 
+        
+        //SubCategory
+        int subindex = cmblSubCategory.getSelectedIndex();
+        if(subindex != 0){
+            SubCategory subcategory = (SubCategory) cmblSubCategory.getSelectedItem();
+            if(subcategory.equals(olditem.getSubCategory())){
+                cmblSubCategory.setBackground(valid); 
+            }else{
+                cmblSubCategory.setBackground(updated);
+                updates = updates + "\n SubCategory Updated "; 
+            }
+            item.setSubCategory((SubCategory)cmblSubCategory.getSelectedItem() );
+        }else{ 
+            cmblSubCategory.setBackground(invalid);
+            error = error + "\n SubCategory not Selected";
+        } 
+
+        //StatusItem
+        int Siindex = cmbStatusItem.getSelectedIndex();
+        if(Siindex != 0){
+            StatusItem statusitem = (StatusItem) cmbStatusItem.getSelectedItem();
+            if(statusitem.equals(olditem.getStatusItem())){
+                cmbStatusItem.setBackground(valid); 
+            }else{
+                cmbStatusItem.setBackground(updated);
+                updates = updates + "\n Status Item Updated "; 
+            }
+            item.setStatusItem((StatusItem)cmbStatusItem.getSelectedItem() );
+        }else{ 
+            cmbStatusItem.setBackground(invalid);
+            error = error + "\n Status Item not Selected";
+        }
+ 
+        //Day,manth,year
+        int dayIndex = cmbDobDay.getSelectedIndex();
+        int monIndex = cmbDobMonth.getSelectedIndex();
+        int yerIndex = cmbDobYear.getSelectedIndex(); 
+
+        String day = " ";
+        String mon = " ";
+        String yer = " ";
+
+        if(dayIndex!=0){ 
+            cmbDobDay.setBackground(valid);
+            day = cmbDobDay.getSelectedItem().toString();
+            if(day.length()==1) day = "0" + day;
+        }else{
+            cmbDobDay.setBackground(invalid);
+        }
+
+        if(monIndex!=0){ 
+            cmbDobMonth.setBackground(valid);
+            mon = cmbDobMonth.getSelectedItem().toString();
+            if(mon.length()==1) mon = "0" + mon;
+        }else{
+            cmbDobMonth.setBackground(invalid);
+        }
+
+        if(yerIndex!=0){ 
+               cmbDobYear.setBackground(valid);
+               yer = cmbDobYear.getSelectedItem().toString();
+        }else{
+               cmbDobYear.setBackground(invalid); 
+        } 
+
+        if(dayIndex !=0 && monIndex !=0 && yerIndex !=0){
+            String dobs = yer+"-"+mon+"-"+day;
+            LocalDate dob = LocalDate.parse(dobs);
+            item.setDoIntroduced(dob);
+                if(item.getDoIntroduced().getDayOfMonth()==olditem.getDoIntroduced().getDayOfMonth() ){
+                    cmbDobDay.setBackground(valid);
+                    cmbDobMonth.setBackground(valid);
+                    cmbDobYear.setBackground(valid); 
+                }else{
+                    cmbDobDay.setBackground(updated);
+                    cmbDobMonth.setBackground(updated);
+                    cmbDobYear.setBackground(updated); 
+                }
+            }else{ 
+                error = error + "\n Select Introduced Date";
+            } 
+
+       if(error.isEmpty() ){ 
+            if(!updates.isEmpty()){
+                int resp = JOptionPane.showConfirmDialog(null,"You have following Updates\n\n"+updates);
+                if(resp==0){ 
+                    String status = ItemController.put(item);
+                    if(status.equals("1")){
+                        int lsrow = tblItem.getSelectedRow(); 
+                        loadView();
+                        tblItem.setRowSelectionInterval(lsrow, lsrow);
+                        loadform();
+                        JOptionPane.showMessageDialog(null, "Succesfully Update ");
+                    }else{ 
+                        JOptionPane.showMessageDialog(null, "Failed to Update as \n\n"+status);
+                    }
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Nothing to be updated");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "You have following Data errors\n\n"+error);
+        }
+    }
+
+    public void btnDeleteAp(ActionEvent e){
+        
+        int resp = JOptionPane.showConfirmDialog(null,"Are you sure to Delete following Item\n\n"+olditem.getName());
+        if(resp==0){ 
+            String status = ItemController.delete(olditem);
+            if(status.equals("1")){
+                int lsrow = tblItem.getSelectedRow(); 
+                loadView();
+                tblItem.setRowSelectionInterval(lsrow, lsrow);
+                loadform();
+                JOptionPane.showMessageDialog(null, "Succesfully Delete");
+                            
+            }else{ 
+                JOptionPane.showMessageDialog(null, "Failed to Delete as \n\n"+status);
+            }
+        }
     }
 
 }

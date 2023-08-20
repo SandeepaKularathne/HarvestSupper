@@ -141,4 +141,37 @@ public class ItemDao {
         return msg;
     }
 
+    public static String update(Item item){ 
+        
+        String msg = "0";
+
+        String sql = "UPDATE item Set brand_id='"+
+                    item.getBrand().getId()+"',  subcategory_id='"+
+                    item.getSubCategory().getId()+"', name='"+
+                    item.getName()+"', code='"+
+                    item.getCode()+"', pricepurchase='"+
+                    item.getPricePurchase()+"', pricesale='"+
+                    item.getPriceSale()+"', qoh='"+
+                    item.getQOH()+"', rop='"+
+                    item.getROP()+"', statusitem_id='"+
+                    item.getStatusItem().getId()+"', dointroduced='"+
+                    item.getDoIntroduced().toString()+"' WHERE id="+item.getId();
+                    
+        msg = CommonDao.insert(sql);
+        
+        return msg;
+   
+    }
+
+    public static String delete(Item item){ 
+        
+        String msg = "0";
+
+        String sql = "delete from harvest.item where id="+item.getId();
+        msg = CommonDao.insert(sql);
+        
+        return msg;
+
+    }
+
 }
