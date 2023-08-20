@@ -21,6 +21,8 @@ import javax.swing.JScrollPane;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter;
 import java.time.LocalDate;
 import java.util.Hashtable; 
 
@@ -79,6 +81,7 @@ public class EmployeeUi extends JFrame{
     List<StatusEmployee> stelist; 
 
     Employee oldEmployee;
+    Employee employee;
 
     EmployeeUi(){ 
 
@@ -182,7 +185,17 @@ public class EmployeeUi extends JFrame{
             jspTable.setPreferredSize( new Dimension(500,225));
             jspTable.setViewportView( employeeTable );
 
-        
+        txtName.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtNameKR( e ); } } );   
+        txtNic.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtNicKR( e ); } } );
+        txtEmail.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtEmailKR( e ); } } );
+        txtMobile.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtMobileKR( e ); } } ); 
+        cmbGender.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbGenderAp( e );  }  } );
+        cmbDesignation.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDesignationAp( e );  }  } );
+        cmbStatusEmployee.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbStatusEmployeeAp( e );  }  } );
+        cmbDobDay.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDobDayAp( e );  }  } );
+        cmbDobMonth.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDobMonthAp( e );  }  } );
+        cmbDobYear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDobYearAp( e );  }  } );
+
         btnSearch.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchAp( e );  }  } );
         btnSearchClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchClearAp( e );  }  } );
         btnAdd.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnAddAp( e );  }  } );
@@ -198,7 +211,7 @@ public class EmployeeUi extends JFrame{
 
     }
 
-        //UI-Controller-Intitialize
+    //UI-Controller-Intitialize
 
     public void intitialize(){ 
 
@@ -207,6 +220,8 @@ public class EmployeeUi extends JFrame{
     }
 
     public void loadForm(){
+
+        employee = new Employee();
 
         genlist = GenderController.get(); 
             Vector<Object> genders = new Vector();
@@ -352,7 +367,136 @@ public class EmployeeUi extends JFrame{
         
     }
 
-        //UI-Controller-Interactive
+    //UI-Controller-Interactive
+
+    //validating and Binding
+
+    public void txtNameKR(KeyEvent e){
+
+        String name = txtName.getText();
+        if( name.matches("^[A-Z][a-z]*$")){
+            employee.setName(name);
+            txtName.setBackground(valid);
+        }else{ 
+            txtName.setBackground(invalid);
+            //error = error + "\n Invalid Name";
+        } 
+
+    }
+
+    public void txtNicKR(KeyEvent e){
+
+        String nic = txtNic.getText();
+        if( nic.matches("^[0-9]{9}V$")){
+            employee.setNic(nic);
+            txtNic.setBackground(valid);
+        }else{ 
+            txtNic.setBackground(invalid);
+            //error = error + "\n Invalid NIC";
+        } 
+
+    }
+
+    public void txtEmailKR(KeyEvent e){
+
+        String email = txtEmail.getText();
+        if( email.matches("^(\\w+([\\.-]?\\w+))*(?:{2})*@(\\w{2,10})*(?:{2})*(\\.\\w{2,3})+$")){
+            employee.setEmail(email);
+            txtEmail.setBackground(valid);
+        }
+        else{ 
+            txtEmail.setBackground(invalid);
+           //error = error + "\n Invalid Email";
+        } 
+
+    }
+
+    public void txtMobileKR(KeyEvent e){
+
+        String mobile = txtMobile.getText();
+        if(  mobile.matches("^0[0-9]{9}$")){
+            employee.setMobile( mobile);
+            txtMobile.setBackground(valid);
+        }else{ 
+            txtMobile.setBackground(invalid);
+            //error = error + "\n Invalid Mobile";
+        }
+
+    }
+
+    public void cmbGenderAp(ActionEvent e){
+
+        int genindex = cmbGender.getSelectedIndex();
+        if( genindex!=0){
+            cmbGender.setBackground(valid);
+            employee.setGender( (Gender)cmbGender.getSelectedItem() );
+        }else{ 
+            cmbGender.setBackground(invalid);
+            //error = error + "\n Gender not Selected";
+        }  
+    }
+
+    public void cmbDesignationAp(ActionEvent e){
+
+        int desindex = cmbDesignation.getSelectedIndex();
+        if( desindex!=0){
+            cmbDesignation.setBackground(valid);
+            employee.setDesignation( (Designation)cmbDesignation.getSelectedItem() );
+        }else{ 
+            cmbDesignation.setBackground(invalid);
+            //error = error + "\n Designation not Selected";
+        } 
+    }
+
+    public void cmbStatusEmployeeAp(ActionEvent e){
+
+        int steindex = cmbStatusEmployee.getSelectedIndex();
+        if( steindex!=0){
+            cmbStatusEmployee.setBackground(valid);
+            employee.setStatusEmployee( (StatusEmployee)cmbStatusEmployee.getSelectedItem() );
+        }else{ 
+            cmbStatusEmployee.setBackground(invalid);
+            //error = error + "\n StatusEmployee not Selected";
+        } 
+    }
+
+    public void cmbDobDayAp(ActionEvent e){
+
+        int dayIndex = cmbDobDay.getSelectedIndex();
+        String day = " ";
+        if(dayIndex!=0){ 
+            cmbDobDay.setBackground(valid);
+            day = cmbDobDay.getSelectedItem().toString();
+            if(day.length()==1) day = "0" + day;
+        }else{
+            cmbDobDay.setBackground(invalid);
+        }
+    }
+
+    public void cmbDobMonthAp(ActionEvent e){
+        int monIndex = cmbDobMonth.getSelectedIndex();
+        String mon = " ";
+        if(monIndex!=0){ 
+            cmbDobMonth.setBackground(valid);
+            mon = cmbDobMonth.getSelectedItem().toString();
+            if(mon.length()==1) mon = "0" + mon;
+        }else{
+            cmbDobMonth.setBackground(invalid);
+        }
+    }
+
+    public void cmbDobYearAp(ActionEvent e){
+        int yerIndex = cmbDobYear.getSelectedIndex();
+        String yer = " ";
+        if(yerIndex!=0){ 
+            cmbDobYear.setBackground(valid);
+            yer = cmbDobYear.getSelectedItem().toString();
+        }else{
+            cmbDobYear.setBackground(invalid); 
+        } 
+    }
+
+    //Form Handling
 
     public void btnSearchAp(ActionEvent e){ 
 
@@ -389,7 +533,6 @@ public class EmployeeUi extends JFrame{
 
     public void btnAddAp(ActionEvent e){
 
-        Employee employee = new Employee();
         String error = "";
 
         String name = txtName.getText();
@@ -413,7 +556,7 @@ public class EmployeeUi extends JFrame{
             }
             
         String email = txtEmail.getText();
-            if( email.matches("^[a-z]*@[a-z]*.[a-z]*$")){
+            if( email.matches("^(\\w+([\\.-]?\\w+))*(?:{2})*@(\\w{2,10})*(?:{2})*(\\.\\w{2,3})+$")){
                 employee.setEmail(email);
                 txtEmail.setBackground(valid);
             }
@@ -633,7 +776,7 @@ public class EmployeeUi extends JFrame{
             }
             
         String email = txtEmail.getText();
-            if( email.matches("^[a-z]*@[a-z]*.[a-z]*$")){
+            if( email.matches("^(\\w+([\\.-]?\\w+))*(?:{2})*@(\\w{2,10})*(?:{2})*(\\.\\w{2,3})+$")){
                 if(email.equals(oldEmployee.getEmail()))
                 txtEmail.setBackground(valid);
                 
