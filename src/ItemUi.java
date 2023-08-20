@@ -25,6 +25,9 @@ import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.time.LocalDate;
 
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+
 public class  ItemUi extends JFrame {
 
     //Goble Varible
@@ -79,6 +82,12 @@ public class  ItemUi extends JFrame {
     JButton btnSearch;
     JButton btnSearchClear;
 
+    List<Item> itelist;
+    List<Brand> bralist;
+    List<SubCategory> sublist;
+    List<StatusItem> stalist;
+
+    //Constracter
     ItemUi() {
 
         valid = new Color(200,255,200);
@@ -187,6 +196,7 @@ public class  ItemUi extends JFrame {
         titles = new Vector();
         titles.add("Brand");
         titles.add("Name");
+        titles.add("Code");
         titles.add("SubCategory");
         titles.add("PricePurchase");
         titles.add("PriceSale");
@@ -209,6 +219,11 @@ public class  ItemUi extends JFrame {
         btnSearch.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchAp( e );  }  } );
         btnSearchClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchClearAp( e );  }  } );
         btnAdd.addActionListener(  new ActionListener(){  public void actionPerformed(ActionEvent e){  btnAddAp(e);  }  } );
+        tblItem.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                tblItemVC(e);
+            }
+        });
         intitialize();  
 
     }
@@ -223,7 +238,7 @@ public class  ItemUi extends JFrame {
     public void loadform() {
 
         //Brand
-        List<Brand> bralist = BrandController.get();
+        bralist = BrandController.get();
         Vector<Object> brands = new Vector();
         brands.add("Select a Brand");
 
@@ -236,7 +251,7 @@ public class  ItemUi extends JFrame {
         cmbBrand.setModel(braModel); 
 
         //SubCategory
-        List<SubCategory> sublist = SubCategoryController.get();
+        sublist = SubCategoryController.get();
         Vector<Object> subcategorys = new Vector();
         subcategorys.add("Select a SubCategory");
 
@@ -248,12 +263,12 @@ public class  ItemUi extends JFrame {
         cmblSubCategory.setModel(subModel);
 
         //StatusItem
-        List<StatusItem> selist = StatusItemController.get();
+        stalist = StatusItemController.get();
         Vector<Object> statusitems = new Vector();
         statusitems.add("Select StatusItem");
 
-        for(StatusItem se: selist){
-            statusitems.add(se);         
+        for(StatusItem sta: stalist){
+            statusitems.add(sta);         
         }
 
         DefaultComboBoxModel<Object> seModel = new DefaultComboBoxModel(statusitems);
@@ -336,7 +351,7 @@ public class  ItemUi extends JFrame {
 
     public void loadView(){
 
-        List<Item> itelist = ItemController.get(null);
+        itelist = ItemController.get(null);
         fillTable(itelist);
 
         List<Brand> bralist = BrandController.get(); 
@@ -604,6 +619,51 @@ public class  ItemUi extends JFrame {
       
         }
             
+    }
+
+    public void tblItemVC(ListSelectionEvent e){
+        int row = tblItem.getSelectedRow(); 
+            if(row>-1){
+                Item item = itelist.get(row);
+                fillForm(item);
+            }
+    }
+
+    public void fillForm(Item item){
+        txtName.setText(item.getName());
+        txtCode.setText(item.getCode());
+        txtPricePurchase.setText(item.getPricePurchase().toString());
+        txtPriceSale.setText(item.getPriceSale().toString());
+        txtQOH.setText(String.valueOf(item.getQOH()));
+        txtROP.setText(String.valueOf(item.getROP()));
+  
+        for(Brand bra: bralist){
+            if(bra.getId()==item.getBrand().getId()){
+                cmbBrand.setSelectedItem(bra);
+                break;
+            }    
+        }
+        
+        for(SubCategory sub: sublist){
+            if(sub.getId()==item.getSubCategory().getId()){
+                cmblSubCategory.setSelectedItem(sub);
+                break;
+            }    
+        }
+
+        for(StatusItem sta: stalist){
+            if(sta.getId()==item.getStatusItem().getId()){
+                cmbStatusItem.setSelectedItem(sta);
+                break;
+            }    
+        }
+ 
+        cmbDobDay.setSelectedItem(item.getDoIntroduced().getDayOfMonth());
+        cmbDobMonth.setSelectedItem(item.getDoIntroduced().getMonthValue());
+        cmbDobYear.setSelectedItem(item.getDoIntroduced().getYear());
+
+        enabledButtons(false,true,true);
+        setStyle(valid);
     }
 
 }

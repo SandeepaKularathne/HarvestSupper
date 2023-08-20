@@ -75,7 +75,7 @@ public class ItemDao {
 
     public static List<Item> getAllBySubcategory(SubCategory subcategory){ 
 
-        String qry = "select * from employee where subcategory_id = "+ subcategory.getId() +"";
+        String qry = "select * from item where subcategory_id = "+ subcategory.getId() +"";
         List<Item> items = get(qry);
         return items;
 
