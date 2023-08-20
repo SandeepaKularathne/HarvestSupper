@@ -201,6 +201,7 @@ public class  ItemUi extends JFrame {
         titles = new Vector();
         titles.add("Brand");
         titles.add("Name");
+        titles.add("Code");
         titles.add("SubCategory");
         titles.add("PricePurchase");
         titles.add("PriceSale");
@@ -695,7 +696,7 @@ public class  ItemUi extends JFrame {
 
         //Name
         String name = txtName.getText(); 
-        if( name.matches("^[A-Za-z]+$")){
+        if( name.matches("^[A-Za-z]\\w{5,29}$")){
             
             if( name.equals(olditem.getName())){
                 txtName.setBackground(valid);
