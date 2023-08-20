@@ -7,6 +7,10 @@ public class HarvestApp{
         EmployeeUi empMgr = new EmployeeUi();
         empMgr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         empMgr.setVisible(true);
+
+        ItemUi itmMgr = new ItemUi();
+        itmMgr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        itmMgr.setVisible(true);
     }
     
 }
