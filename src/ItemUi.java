@@ -21,7 +21,9 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane; 
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener; 
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyAdapter; 
 
 import java.util.Hashtable;
 import java.time.LocalDate;
@@ -90,6 +92,7 @@ public class  ItemUi extends JFrame {
     List<StatusItem> stalist;
 
     Item olditem;
+    Item item;
 
     //Constracter
     ItemUi() {
@@ -238,6 +241,19 @@ public class  ItemUi extends JFrame {
             jspTable.setViewportView(tblItem);
         con.add(jspTable);
 
+        txtName.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtNameKR( e ); } } ); 
+        txtCode.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtCodeKR( e ); } } ); 
+        txtPricePurchase.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtPricePurchaseKR( e ); } } ); 
+        txtPriceSale.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtPriceSaleKR( e ); } } ); 
+        txtQOH.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtQOHKR( e ); } } ); 
+        txtROP.addKeyListener( new KeyAdapter(){ public void keyReleased(KeyEvent e){ txtROPKR( e ); } } );   
+        cmbBrand.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbBrandAp( e );  }  } );
+        cmblSubCategory.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmblSubCategoryAp( e );  }  } );
+        cmbStatusItem.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbStatusItemAp( e );  }  } );
+        cmbDobDay.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDobDayAp( e );  }  } );
+        cmbDobMonth.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDobMonthAp( e );  }  } );
+        cmbDobYear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ cmbDobYearAp( e );  }  } );
+
         btnSearch.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchAp( e );  }  } );
         btnSearchClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnSearchClearAp( e );  }  } );
         btnAdd.addActionListener(  new ActionListener(){  public void actionPerformed(ActionEvent e){  btnAddAp(e);  }  } );
@@ -253,7 +269,8 @@ public class  ItemUi extends JFrame {
 
     }
 
-    //Method
+    //UI-Controller-Intitialize
+
     public void intitialize() {
         loadView();
         loadform();
@@ -261,6 +278,8 @@ public class  ItemUi extends JFrame {
     
 
     public void loadform() {
+
+        item = new Item();  
 
         //Brand
         bralist = BrandController.get();
@@ -434,6 +453,162 @@ public class  ItemUi extends JFrame {
 
     }
 
+    //UI-Controller-Interactive
+
+    //validating and Binding
+
+    public void txtNameKR(KeyEvent e){
+
+        String name = txtName.getText();
+        if( name.matches("^[A-Z][a-z]*$")){
+            item.setName(name);
+            txtName.setBackground(valid);
+        }else{ 
+            txtName.setBackground(invalid);
+            //error = error + "\n Invalid Name";
+        } 
+
+    }
+
+    public void txtCodeKR(KeyEvent e){
+
+        String code = txtCode.getText();
+        if(code.matches("^\\d{1,5}$")){
+            item.setCode(code);
+            txtCode.setBackground(valid);
+        }else{
+            txtCode.setBackground(invalid);
+            //error =error +"\n invalid Code";
+        } 
+
+    }
+
+    public void txtPricePurchaseKR(KeyEvent e){
+
+        String pricepurchase = txtPricePurchase.getText();
+        if(pricepurchase.matches("^\\d{1,6}(.\\d{2})?$")){
+            item.setPricePurchase(Double.parseDouble(pricepurchase));
+            txtPricePurchase.setBackground(valid);
+        }else{
+            txtPricePurchase.setBackground(invalid);
+            //error =error +"\n invalid PricePurchase";
+        } 
+
+    }
+
+    public void txtPriceSaleKR(KeyEvent e){
+
+        String pricesale = txtPriceSale.getText();
+        if(pricesale.matches("^\\d{1,6}(.\\d{2})?$")){
+            item.setPriceSale(Double.parseDouble(pricesale));
+            txtPriceSale.setBackground(valid);
+        }else{
+            txtPriceSale.setBackground(invalid);
+            //error =error +"\n invalid PriceSale";
+        } 
+
+    }
+
+    public void txtQOHKR(KeyEvent e){
+
+        String qoh = txtQOH.getText();
+        if(qoh.matches("^\\d{1,5}$")){
+            item.setQOH(Integer.parseInt(qoh));
+            txtQOH.setBackground(valid);
+        }else{
+            txtQOH.setBackground(invalid);
+            //error =error +"\n invalid QOH";
+        } 
+
+    }
+
+    public void txtROPKR(KeyEvent e){
+
+        String rop = txtROP.getText();
+        if(rop .matches("^\\d{1,5}$")){
+            item.setROP(Integer.parseInt(rop));
+            txtROP.setBackground(valid);
+        }else{
+            txtROP.setBackground(invalid);
+            //error =error +"\n invalid ROP";
+        } 
+
+    }
+
+    public void cmbBrandAp(ActionEvent e){
+
+        int brandindex = cmbBrand.getSelectedIndex();
+        if(brandindex != 0){
+          cmbBrand.setBackground(valid);
+          item.setBrand((Brand)cmbBrand.getSelectedItem() );
+        }else{
+          cmbBrand.setBackground(invalid);
+          //error =error +"\n Brand Not selected";
+        }  
+    }
+
+    public void cmblSubCategoryAp(ActionEvent e){
+
+        int subindex = cmblSubCategory.getSelectedIndex();
+        if(subindex != 0){
+          cmblSubCategory.setBackground(valid);
+          item.setSubCategory((SubCategory)cmblSubCategory.getSelectedItem() );
+        }else{
+          cmblSubCategory.setBackground(invalid);
+          //error =error +"\n Sub Category Not selected";
+        } 
+    }
+
+    public void cmbStatusItemAp(ActionEvent e){
+
+        int Siindex = cmbStatusItem.getSelectedIndex();
+        if(Siindex != 0){
+          cmbStatusItem.setBackground(valid);
+          item.setStatusItem((StatusItem)cmbStatusItem.getSelectedItem() );
+        }else{
+          cmbStatusItem.setBackground(invalid);
+          //error =error +"\n StatusItem Not selected";
+        } 
+    }
+
+    public void cmbDobDayAp(ActionEvent e){
+
+        int dayIndex = cmbDobDay.getSelectedIndex();
+        String day = " ";
+        if(dayIndex!=0){ 
+            cmbDobDay.setBackground(valid);
+            day = cmbDobDay.getSelectedItem().toString();
+            if(day.length()==1) day = "0" + day;
+        }else{
+            cmbDobDay.setBackground(invalid);
+        }
+    }
+
+    public void cmbDobMonthAp(ActionEvent e){
+        int monIndex = cmbDobMonth.getSelectedIndex();
+        String mon = " ";
+        if(monIndex!=0){ 
+            cmbDobMonth.setBackground(valid);
+            mon = cmbDobMonth.getSelectedItem().toString();
+            if(mon.length()==1) mon = "0" + mon;
+        }else{
+            cmbDobMonth.setBackground(invalid);
+        }
+    }
+
+    public void cmbDobYearAp(ActionEvent e){
+        int yerIndex = cmbDobYear.getSelectedIndex();
+        String yer = " ";
+        if(yerIndex!=0){ 
+            cmbDobYear.setBackground(valid);
+            yer = cmbDobYear.getSelectedItem().toString();
+        }else{
+            cmbDobYear.setBackground(invalid); 
+        } 
+    }
+
+    //Form Handling
+
     public void btnSearchAp(ActionEvent e){ 
 
         String name = txtSearchName.getText().trim();
@@ -477,8 +652,6 @@ public class  ItemUi extends JFrame {
     }
 
     public void btnAddAp(ActionEvent e){
-
-        Item item = new Item();  
     
         String error ="";
         
