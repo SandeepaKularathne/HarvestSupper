@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import java.util.Vector;
 import java.util.List;
+import java.util.HashMap;
 
 import java.awt.Dimension;
 import java.awt.Container;
@@ -101,7 +102,7 @@ public class  ItemUi extends JFrame {
 
         setTitle("Item");
         setLocation(200, 300);
-        setSize(800, 600);
+        setSize(1000, 700);
 
         Container con = getContentPane();
         FlowLayout lay = new FlowLayout();
@@ -120,9 +121,9 @@ public class  ItemUi extends JFrame {
         lblCode = new JLabel ("Item Code :");
 
         //Text Filed
-        txtName = new JTextField(52);
-        txtCode = new JTextField(52);
-        txtPricePurchase = new JTextField(50);
+        txtName = new JTextField(53);
+        txtCode = new JTextField(51);
+        txtPricePurchase = new JTextField(49);
         txtPriceSale = new JTextField(50);
         txtQOH = new JTextField(50);
         txtROP = new JTextField(50);
@@ -141,24 +142,39 @@ public class  ItemUi extends JFrame {
         btnUpdate =new JButton("Update");
         btnDelet =new JButton("Delet");
 
-        JLabel lblEmpty= new JLabel("                                                                                                                                                                                                             ");
+        JLabel lblEmpty= new JLabel("                                                                      ");
+        JLabel lblEmpty1= new JLabel("                                                                                                                                                                                                  ");
+        JLabel lblEmpty2= new JLabel("                                                                 ");
+        JLabel lblEmpty3= new JLabel("                                                                                                                                                                           ");
+        JLabel lblEmpty4= new JLabel("                                                                 ");
+        JLabel lblEmpty5= new JLabel("                                                                        ");                                                                                                      
+        JLabel lblEmpty6= new JLabel("                                                                               ");
+        JLabel lblEmpty7= new JLabel("                                                                               ");
 
             con.add(lblName);
             con.add(txtName);
+            con.add(lblEmpty);
             con.add(lblBrand);
             con.add(cmbBrand);
+            con.add(lblEmpty1);
             con.add(lblCode);
             con.add(txtCode);
+            con.add(lblEmpty2);
             con.add(lblSubCategory);
             con.add(cmblSubCategory);
+            con.add(lblEmpty3);
             con.add(lblPricePurchase);
             con.add(txtPricePurchase);
+            con.add(lblEmpty4);
             con.add(lblPriceSale);
             con.add(txtPriceSale);
+            con.add(lblEmpty5);
             con.add(lblQOH);
             con.add(txtQOH);
+            con.add(lblEmpty6);
             con.add(lblROP);
             con.add(txtROP);
+            con.add(lblEmpty7);
             con.add(lblStatusItem);
             con.add(cmbStatusItem);
             con.add(lblDoIntroduced);
@@ -199,12 +215,13 @@ public class  ItemUi extends JFrame {
         con.add(lblfristEnd4);
 
         titles = new Vector();
-        titles.add("Brand");
         titles.add("Name");
+        titles.add("Brand");
         titles.add("Code");
         titles.add("SubCategory");
         titles.add("PricePurchase");
         titles.add("PriceSale");
+        titles.add("Profit");
         titles.add("QOH");
         titles.add("ROP");
         titles.add("StatusItem");
@@ -217,7 +234,7 @@ public class  ItemUi extends JFrame {
         tblItem.setModel(dataModel);
 
         JScrollPane jspTable = new JScrollPane();
-            jspTable.setPreferredSize(new Dimension(500, 200));
+            jspTable.setPreferredSize(new Dimension(900, 200));
             jspTable.setViewportView(tblItem);
         con.add(jspTable);
 
@@ -391,17 +408,19 @@ public class  ItemUi extends JFrame {
 
     public void fillTable(List<Item> items) {
 
-        Vector data = new Vector();
+        data = new Vector();
 
         for (Item emp : items) {
 
             Vector r = new Vector();
-            r.add(emp.getBrand().getName());
+            
             r.add(emp.getName());
+            r.add(emp.getBrand().getName());
             r.add(emp.getCode());
             r.add(emp.getSubCategory().getName());
             r.add(emp.getPricePurchase());
             r.add(emp.getPriceSale());
+            r.add(emp.getPriceSale()-emp.getPricePurchase());
             r.add(emp.getQOH());
             r.add(emp.getROP());
             r.add(emp.getStatusItem().getName());
@@ -417,23 +436,25 @@ public class  ItemUi extends JFrame {
 
     public void btnSearchAp(ActionEvent e){ 
 
-        String name = txtSearchName.getText();
+        String name = txtSearchName.getText().trim();
+        name = (name.equals(""))? null : name;
         Object sitem = cmbSearchBrand.getSelectedItem();
         Object sitem1 = cmbSearchSubCategory.getSelectedItem();
         Brand brand = null; 
         SubCategory subcategory = null; 
 
-        if(!sitem.equals("Select Brand"))
+
+        if(!sitem.equals("Select brand"))
         brand = (Brand)sitem;
 
         if(!sitem1.equals("Select SubCategory"))
         subcategory  = (SubCategory) sitem1;
 
-        Hashtable<String , Object> ht = new Hashtable();
+        HashMap<String , Object> ht = new HashMap<>();
         ht.put("name", name);
         if(brand!=null)ht.put("brand", brand);
         if(subcategory!=null)ht.put("subcategory", subcategory);
-
+        
         List<Item> items = ItemController.get(ht);
         fillTable(items); 
 
@@ -445,7 +466,7 @@ public class  ItemUi extends JFrame {
 
         if(opt!=1){
 
-            txtSearchName.setText(" ");
+            txtSearchName.setText("");
             cmbSearchBrand.setSelectedIndex(0);
             cmbSearchSubCategory.setSelectedIndex(0);
 
@@ -463,7 +484,7 @@ public class  ItemUi extends JFrame {
         
         //Name
         String name = txtName.getText();
-        if(name.matches("^[A-Za-z]\\w{5,29}$")){
+        if(name.matches("^[a-zA-Z\\s0-9]+?")){
               item.setName(name);
               txtName.setBackground(valid);
         }else{
@@ -696,7 +717,7 @@ public class  ItemUi extends JFrame {
 
         //Name
         String name = txtName.getText(); 
-        if( name.matches("^[A-Za-z]\\w{5,29}$")){
+        if( name.matches("^[a-zA-Z\\s0-9]+?")){
             
             if( name.equals(olditem.getName())){
                 txtName.setBackground(valid);

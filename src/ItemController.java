@@ -1,11 +1,11 @@
 import java.util.Hashtable;
 import java.util.List;
+import java.util.HashMap;
 import java.util.ArrayList;
-import java.time.LocalDate;
 
 public class ItemController {
 
-    public static List<Item> get(Hashtable<String , Object> ht) {
+    public static List<Item> get(HashMap<String , Object> ht) {
 
         List<Item> items = new ArrayList<>(); 
 
@@ -16,15 +16,29 @@ public class ItemController {
             Brand brand = (Brand) ht.get("brand");
             SubCategory subcategory = (SubCategory) ht.get("subcategory");
 
-            if(name==null)
-                items = ItemDao.getAllByName(name);
-            else if (brand==null)
-                items = ItemDao.getAllByBrand(brand);
-            else if (subcategory==null)
-                items = ItemDao.getAllBySubcategory(subcategory);
-            else
-                items = ItemDao.getAllByNameAndBrandAndSubCategory(name, brand, subcategory);
 
+            if(name == null && subcategory == null && brand == null )
+                items = ItemDao.getAll();
+
+            if(name != null && subcategory == null && brand == null )
+                items = ItemDao.getAllByName(name);
+            
+            if(name == null && subcategory != null && brand == null )
+                items = ItemDao.getAllBySubcategory(subcategory);
+                
+            if(name == null && subcategory == null && brand != null ){
+                System.out.println("aaaaaaaaa");
+                items = ItemDao.getAllByBrand(brand);
+            }
+                
+            if (name != null  && subcategory == null && brand != null)
+                items = ItemDao.getAllByNameAndBrand(name, brand);
+                
+            if (name == null  && subcategory != null && brand != null)
+                items = ItemDao.getAllBySubCategoryAndBrand(subcategory, brand);
+
+            if (name != null  && subcategory != null && brand == null)
+                items = ItemDao.getAllByNameAndSubCategory(name, subcategory);
         }   
         return items;
 

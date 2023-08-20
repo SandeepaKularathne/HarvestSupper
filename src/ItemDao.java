@@ -66,8 +66,8 @@ public class ItemDao {
     } 
 
     public static List<Item> getAllByBrand(Brand brand){ 
-
-        String qry = "select * from item where brand_id = "+ brand.getId() +"";
+        
+        String qry = "select * from item where brand_id = "+ brand.getId() +";";
         List<Item> items = get(qry);
         return items;
 
@@ -75,8 +75,32 @@ public class ItemDao {
 
     public static List<Item> getAllBySubcategory(SubCategory subcategory){ 
 
-        String qry = "select * from item where subcategory_id = "+ subcategory.getId() +"";
+        String qry = "select * from item where subcategory_id = "+ subcategory.getId() +";";
         List<Item> items = get(qry);
+        return items;
+
+    }
+
+    public  static List<Item> getAllByNameAndBrand(String name,Brand brand){
+        
+        String qry = "select * from item where name like '"+name+"%' and brand_id = "+brand.getId()+";";
+        List<Item> items =  get(qry);
+        return items;
+
+    }
+
+    public  static List<Item> getAllBySubCategoryAndBrand(SubCategory subCategory,Brand brand){
+        
+        String qry = "select * from item where brand_id = "+brand.getId()+" and subcategory_id = "+subCategory.getId()+";";
+        List<Item> items =  get(qry);
+        return items;
+
+    }
+
+    public  static List<Item> getAllByNameAndSubCategory(String name,SubCategory subCategory){
+        
+        String qry = "select * from item where name like '"+name+"%' and subcategory_id = "+subCategory.getId()+";";
+        List<Item> items =  get(qry);
         return items;
 
     }
