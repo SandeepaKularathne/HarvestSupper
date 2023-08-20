@@ -73,19 +73,19 @@ public class Item {
         return pricesale;
     }
 
-    public void setQoh(int qoh) {
+    public void setQOH(int qoh) {
         this.qoh = qoh;
     }
 
-    public int getQoh() {
+    public int getQOH() {
         return qoh;
     }
 
-    public void setRop(int rop) {
+    public void setROP(int rop) {
         this.rop = rop;
     }
 
-    public int getRop() {
+    public int getROP() {
         return rop;
     }
 

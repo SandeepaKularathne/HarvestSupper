@@ -29,5 +29,31 @@ public class ItemController {
 
     }
 
+    public static String post(Item item){
+    
+        String msg ="";
+        String err ="";
+        
+        Item iteCode =ItemDao.getByCode(item.getCode());
+    
+        if(iteCode!=null) err =err +"\nCode Exists";
+    
+        if(err.isEmpty()){
+    
+            String dberr = ItemDao.save(item);
+            if(dberr.equals("1"))
+            msg ="1";
+            else            
+            msg ="DB error as: "+ dberr;
+    
+        }else{
+            msg= "Data Errors: \n" + err;
+        }
+    
+        
+        return msg;
+    } 
+
+
 }
 

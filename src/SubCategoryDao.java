@@ -17,10 +17,12 @@ public class SubCategoryDao {
             String qry = "select * from subcategory where id="+id;
             ResultSet rslt = CommonDao.get(qry);
             rslt.next();
-            subcategory.setId(rslt.getInt(1));
-            subcategory.setName(rslt.getObject(2).toString());
+                subcategory.setId(rslt.getInt(1));
+                subcategory.setName(rslt.getObject(2).toString());
 
-        } catch (SQLException e) {
+        } 
+        
+        catch (SQLException e) {
             System.out.println("Can't Get Results as : " + e.getMessage());
         }
 
@@ -46,7 +48,9 @@ public class SubCategoryDao {
                 subcategorys.add(subcategory);
             }
 
-        } catch (SQLException e) {
+        }
+        
+        catch (SQLException e) {
             System.out.println("Can't Get Results as : " + e.getMessage());
         }
 

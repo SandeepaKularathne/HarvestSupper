@@ -22,6 +22,7 @@ public class SubCategory {
         return name;
     }
 
+    @Override
     public String toString(){ 
         return name;
     }

@@ -22,4 +22,9 @@ public class StatusItem{
         return name;
     }
 
+    public String toString(){
+        return name;
+    }
+
+
 }

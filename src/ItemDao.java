@@ -32,9 +32,9 @@ public class ItemDao {
 
                     item.setPricePurchase(rslt.getDouble("pricepurchase"));
                     item.setPriceSale(rslt.getDouble("pricesale"));
-                    item.setQoh(rslt.getInt("qoh"));
-                    item.setRop(rslt.getInt("rop"));
-                    item.setStatusItem( StatusItemDao.getById( rslt.getInt("statusitem_id") ) ); 
+                    item.setQOH(rslt.getInt("qoh"));
+                    item.setROP(rslt.getInt("rop"));
+                    item.setStatusItem( StatusItemDao.getById( rslt.getInt("statusitem_id") ) );
                     item.setDoIntroduced(LocalDate.parse(rslt.getObject("dointroduced").toString()));
 
                     items.add(item);
@@ -54,7 +54,7 @@ public class ItemDao {
         String qry = "select * from item";
         List<Item> items = get(qry);
         return items;
-
+        
     } 
 
     public static List<Item> getAllByName(String name){ 
@@ -67,7 +67,7 @@ public class ItemDao {
 
     public static List<Item> getAllByBrand(Brand brand){ 
 
-        String qry = "select * from employee where brand_id = "+ brand.getId() +"";
+        String qry = "select * from item where brand_id = "+ brand.getId() +"";
         List<Item> items = get(qry);
         return items;
 
@@ -87,6 +87,58 @@ public class ItemDao {
         List<Item> items = get(qry);
         return items;
 
+    }
+
+    public  static Item getByCode(String code){
+        Item item =null;
+        
+        String qry = "select * from item where code ='"+code+"'";
+        try{
+            ResultSet rslt = CommonDao.get(qry); 
+            if(rslt!=null && rslt.next()){
+    
+                item.setId(rslt.getInt("id"));
+                item.setBrand( BrandDao.getById( rslt.getInt("brand_id") ) );
+                item.setSubCategory( SubCategoryDao.getById( rslt.getInt("subcategory_id") ) );
+                item.setName(rslt.getObject("name").toString());
+                item.setCode(rslt.getObject("code").toString());
+
+                item.setPricePurchase(rslt.getDouble("pricepurchase"));
+                item.setPriceSale(rslt.getDouble("pricesale"));
+                item.setQOH(rslt.getInt("qoh"));
+                item.setROP(rslt.getInt("rop"));
+                item.setStatusItem( StatusItemDao.getById( rslt.getInt("statusitem_id") ) ); 
+                item.setDoIntroduced(LocalDate.parse(rslt.getObject("dointroduced").toString()));
+
+            }
+    
+        }catch(SQLException e1){
+            System.out.println("Can't Connect as : " + e1.getMessage());
+        }
+    
+        return item;
+    }
+    
+    public static String save(Item item){
+        
+        String msg="0";
+    
+        String sql ="insert into item(brand_id,subcategory_id,name,code,pricepurchase,pricesale,qoh,rop,statusitem_id,dointroduced) Values("+
+            item.getBrand().getId()+","+
+            item.getSubCategory().getId()+",'"+
+            item.getName()+"',"+
+            item.getCode()+","+
+
+            item.getPricePurchase()+","+
+            item.getPriceSale()+","+
+            item.getQOH()+","+
+            item.getROP()+","+
+            item.getStatusItem().getId()+",'"+
+            item.getDoIntroduced().toString()+"')";
+
+        msg = CommonDao.insert(sql);
+        
+        return msg;
     }
 
 }

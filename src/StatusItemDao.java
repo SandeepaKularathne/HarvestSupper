@@ -19,10 +19,12 @@ public class StatusItemDao {
             ResultSet rslt = CommonDao.get(qry);
 
             rslt.next();
-            statusitem.setId(rslt.getInt(1));
-            statusitem.setName(rslt.getObject(2).toString()); 
+                statusitem.setId(rslt.getInt(1));
+                statusitem.setName(rslt.getObject(2).toString()); 
 
-        } catch (SQLException e) {
+        } 
+        
+        catch (SQLException e) {
             System.out.println("Can't Get Results as : " + e.getMessage());
         }
 
@@ -45,6 +47,7 @@ public class StatusItemDao {
 
                     statusitem.setId(rslt.getInt("id"));
                     statusitem.setName(rslt.getObject("name").toString() );
+                    
                     statusitems.add(statusitem);
                 }
         }
