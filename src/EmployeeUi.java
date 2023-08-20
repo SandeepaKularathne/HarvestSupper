@@ -188,7 +188,7 @@ public class EmployeeUi extends JFrame{
         btnAdd.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnAddAp( e );  }  } );
         btnClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnClearAp( e );  }  } );
         btnUpdate.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnUpdateAp( e );  }  } );
-        
+        btnDelete.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnDeleteAp( e );  }  } );
         employeeTable.getSelectionModel().addListSelectionListener( new ListSelectionListener(){ public void valueChanged( ListSelectionEvent e){ employeeTableVC(e); } } );
 
         intitialize(); 
@@ -791,14 +791,37 @@ public class EmployeeUi extends JFrame{
                         else{ 
                             JOptionPane.showMessageDialog(null, "Failed to Update as \n\n"+status);
                         }
+
                     }
-                }else{
+                }
+                else{
                 JOptionPane.showMessageDialog(null, "Nothing to be updated");
                 }
-            }else{
+            }
+        else{
             JOptionPane.showMessageDialog(null, "You have following Data errors\n\n"+error);
         }
 
     }
    
+    public void btnDeleteAp(ActionEvent e){
+        
+        int resp = JOptionPane.showConfirmDialog(null,"Are you sure to Delete following Employee\n\n"+oldEmployee.getName());
+            if(resp==0){ 
+                String status = EmployeeController.delete(oldEmployee);
+                if(status.equals("1")){
+                    int lsrow = employeeTable.getSelectedRow(); 
+                    loadView();
+                    employeeTable.setRowSelectionInterval(lsrow, lsrow);
+                    loadForm();
+                    JOptionPane.showMessageDialog(null, "Succesfully Delete");
+                            
+                }
+
+                else{ 
+                    JOptionPane.showMessageDialog(null, "Failed to Delete as \n\n"+status);
+                    }
+
+       }
+    }
 }

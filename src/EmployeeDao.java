@@ -116,7 +116,7 @@ public class EmployeeDao{
         
         String msg = "0";
 
-        String sql = "insert into employee(name,dob,gender_id,nic,mobile,email,designation_id,statusEmployee_id) values( ' " +
+        String sql = "insert into employee(name,dob,gender_id,nic,mobile,email,designation_id,statusEmployee_id) values( '" +
                     employee.getName() + "','" +
                     employee.getDob().toString() + "','" +
                     employee.getGender().getId() + "','" +
@@ -148,6 +148,18 @@ public class EmployeeDao{
                     employee.getDob().toString()+"' , email='"+
                     employee.getEmail()+"' WHERE id="+employee.getId();
                     
+        msg = CommonDao.insert(sql);
+        
+        return msg;
+
+        
+    }
+
+    public static String delete(Employee employee){ 
+        
+        String msg = "0";
+
+        String sql = "delete from harvest.employee where id="+employee.getId();
         msg = CommonDao.insert(sql);
         
         return msg;

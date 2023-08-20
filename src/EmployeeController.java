@@ -1,14 +1,15 @@
 import java.util.Hashtable;
 import java.util.List;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 
-    public class EmployeeController{ 
+public class EmployeeController{ 
 
-        public static List<Employee> get(Hashtable<String , Object> ht){ 
+    public static List<Employee> get(Hashtable<String , Object> ht){ 
 
-            List<Employee> employees = new ArrayList<>(); 
+        List<Employee> employees = new ArrayList<>(); 
 
             if(ht==null){ employees = EmployeeDao.getAll(); } 
             else{ 
@@ -53,7 +54,7 @@ import java.util.ArrayList;
         }
         return msg;
     }
-
+    
     public static String put(Employee employee){ 
 
         String msg = "";
@@ -78,6 +79,17 @@ import java.util.ArrayList;
         }
         return msg;
     }
-    
 
+    public static String delete(Employee employee){ 
+
+        String msg = "";
+        
+            String dberr = EmployeeDao.delete(employee);
+            if(dberr.equals("1"))
+            msg="1";
+            else
+            msg="DB error as : " + dberr;
+        
+        return msg;
+    }
 }
