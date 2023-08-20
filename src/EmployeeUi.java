@@ -189,6 +189,7 @@ public class EmployeeUi extends JFrame{
         btnClear.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnClearAp( e );  }  } );
         btnUpdate.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnUpdateAp( e );  }  } );
         btnDelete.addActionListener( new ActionListener(){ public void actionPerformed(ActionEvent e){ btnDeleteAp( e );  }  } );
+        
         employeeTable.getSelectionModel().addListSelectionListener( new ListSelectionListener(){ public void valueChanged( ListSelectionEvent e){ employeeTableVC(e); } } );
 
         intitialize(); 
@@ -196,6 +197,8 @@ public class EmployeeUi extends JFrame{
         con.add(jspTable);
 
     }
+
+        //UI-Controller-Intitialize
 
     public void intitialize(){ 
 
@@ -271,8 +274,8 @@ public class EmployeeUi extends JFrame{
 
         txtName.setText("");
         txtNic.setText("");
-        txtMobile.setText("");
-        txtEmail.setText("");
+        txtMobile.setText("077");
+        txtEmail.setText("@gmail.com");
 
         enableButtons(true, false, false);
         setStyle( initial );
@@ -348,6 +351,8 @@ public class EmployeeUi extends JFrame{
 
         
     }
+
+        //UI-Controller-Interactive
 
     public void btnSearchAp(ActionEvent e){ 
 
@@ -528,7 +533,7 @@ public class EmployeeUi extends JFrame{
                                             
         }
         else{
-            JOptionPane.showMessageDialog(null, error);
+            JOptionPane.showMessageDialog(null, "You have Following\n\n"+error);
         }
 
     }
@@ -824,4 +829,5 @@ public class EmployeeUi extends JFrame{
 
        }
     }
+
 }
